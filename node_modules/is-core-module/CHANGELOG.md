@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v2.12.1](https://github.com/inspect-js/is-core-module/compare/v2.12.0...v2.12.1) - 2023-05-16
+
+### Commits
+
+- [Fix] `test/reporters` now requires the `node:` prefix as of v20.2 [`12183d0`](https://github.com/inspect-js/is-core-module/commit/12183d0d8e4edf56b6ce18a1b3be54bfce10175b)
+
 ## [v2.12.0](https://github.com/inspect-js/is-core-module/compare/v2.11.0...v2.12.0) - 2023-04-10
 
 ### Commits
