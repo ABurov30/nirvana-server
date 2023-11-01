@@ -6,6 +6,7 @@ const authRouter = express.Router()
 
 authRouter.post('/signup', async (req, res) => {
 	try {
+		console.log(req.body)
 		const { nickname, email, password } = req.body
 
 		const hashpass = await bcrypt.hash(password, 10)
@@ -33,7 +34,6 @@ authRouter.post('/signup', async (req, res) => {
 
 authRouter.post('/login', async (req, res) => {
 	try {
-		console.log('---------------,dfsaasd')
 		const { email, password } = req.body
 
 		const foundUser = await User.findOne({ where: { email } })
@@ -66,6 +66,7 @@ authRouter.get('/logout', (req, res) => {
 
 authRouter.get('/check', async (req, res) => {
 	try {
+		console.log('-------', req.session)
 		if (req.session?.user?.id) {
 			return res.json(req.session.user)
 		}
