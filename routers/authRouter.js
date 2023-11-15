@@ -6,7 +6,6 @@ const authRouter = express.Router()
 
 authRouter.post('/signup', async (req, res) => {
 	try {
-		console.log(req.body)
 		const { nickname, email, password } = req.body
 
 		const hashpass = await bcrypt.hash(password, 10)
@@ -18,8 +17,7 @@ authRouter.post('/signup', async (req, res) => {
 			}
 		})
 
-		if (!created)
-			return res.status(401).json({ message: 'Email is in use' })
+		if (!created) return res.status(401).send('Email is in use')
 
 		const { id } = foundUser
 		const userWithoutPass = { id, nickname, email }
@@ -38,8 +36,9 @@ authRouter.post('/login', async (req, res) => {
 
 		const foundUser = await User.findOne({ where: { email } })
 
-		if (!foundUser)
-			return res.status(401).json({ message: 'No such email' })
+		if (!foundUser) {
+			return res.status(401).send('No such email')
+		}
 
 		if (await bcrypt.compare(password, foundUser.hashpass)) {
 			const { id, nickname, email } = foundUser
@@ -48,7 +47,7 @@ authRouter.post('/login', async (req, res) => {
 			return res.json(userWithoutPass)
 		}
 
-		return res.status(401).json({ message: 'Wrong password' })
+		return res.status(401).send('Wrong password')
 	} catch (e) {
 		console.log(e)
 	}
@@ -66,11 +65,10 @@ authRouter.get('/logout', (req, res) => {
 
 authRouter.get('/check', async (req, res) => {
 	try {
-		console.log('-------', req.session)
 		if (req.session?.user?.id) {
 			return res.json(req.session.user)
 		}
-		return res.sendStatus(401)
+		return res.status(401).send('Unauthorized')
 	} catch (e) {
 		console.log(e)
 	}

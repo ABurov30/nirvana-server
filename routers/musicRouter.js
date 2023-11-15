@@ -4,18 +4,19 @@ const { Op } = Sequelize
 
 const musicRouter = express.Router()
 
-musicRouter.get('/', async (req, res) => {
+musicRouter.post('/', async (req, res) => {
 	try {
+		const { offset } = req.body
 		const results = await Station.findAll({
 			order: [
 				['votes', 'DESC'],
 				['lastcheckoktime', 'DESC']
 			],
-			limit: 15
+			limit: 5,
+			offset: offset
 		})
 
 		const topRadio = results.map(result => result.dataValues)
-		console.log(topRadio, '---------------')
 		res.send(topRadio)
 	} catch (error) {
 		console.error('Ошибка:', error)
