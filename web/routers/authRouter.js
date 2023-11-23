@@ -1,6 +1,7 @@
 const express = require('express')
 const bcrypt = require('bcrypt')
-const { User } = require('../models')
+const { User } = require('../../db/models')
+const authService = require('../services/authService')
 
 const authRouter = express.Router()
 
@@ -8,14 +9,11 @@ authRouter.post('/signup', async (req, res) => {
 	try {
 		const { nickname, email, password } = req.body
 
-		const hashpass = await bcrypt.hash(password, 10)
-		const [foundUser, created] = await User.findOrCreate({
-			where: { email },
-			defaults: {
-				nickname,
-				hashpass
-			}
-		})
+		const { foundUser, created } = await authService.signup(
+			nickname,
+			email,
+			password
+		)
 
 		if (!created) return res.status(401).send('Email is in use')
 
@@ -34,22 +32,14 @@ authRouter.post('/login', async (req, res) => {
 	try {
 		const { email, password } = req.body
 
-		const foundUser = await User.findOne({ where: { email } })
+		const userWithoutPass = await authService.login(email, password)
 
-		if (!foundUser) {
-			return res.status(401).send('No such email')
-		}
+		req.session.user = userWithoutPass
 
-		if (await bcrypt.compare(password, foundUser.hashpass)) {
-			const { id, nickname, email } = foundUser
-			const userWithoutPass = { id, nickname, email }
-			req.session.user = userWithoutPass
-			return res.json(userWithoutPass)
-		}
-
-		return res.status(401).send('Wrong password')
+		return res.json(userWithoutPass)
 	} catch (e) {
 		console.log(e)
+		return res.status(401).send(e.message)
 	}
 })
 

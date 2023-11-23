@@ -1,5 +1,5 @@
 const express = require('express')
-const { Station, Sequelize } = require('../models')
+const { Station, Sequelize } = require('../../db/models')
 const { Op } = Sequelize
 
 const musicRouter = express.Router()
