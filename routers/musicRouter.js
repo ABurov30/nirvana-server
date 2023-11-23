@@ -4,25 +4,6 @@ const { Op } = Sequelize
 
 const musicRouter = express.Router()
 
-musicRouter.post('/', async (req, res) => {
-	try {
-		const { offset } = req.body
-		const results = await Station.findAll({
-			order: [
-				['votes', 'DESC'],
-				['lastcheckoktime', 'DESC']
-			],
-			limit: 5,
-			offset: offset
-		})
-
-		const topRadio = results.map(result => result.dataValues)
-		res.send(topRadio)
-	} catch (error) {
-		console.error('Ошибка:', error)
-	}
-})
-
 musicRouter.get('/uniqNames', async (req, res) => {
 	try {
 		const results = await Station.findAll({
@@ -33,7 +14,9 @@ musicRouter.get('/uniqNames', async (req, res) => {
 			],
 			limit: 15
 		})
-		const uniqNames = results.map(result => result.dataValues)
+		const uniqNames = results.map((el, i) => {
+			return { label: el.name, key: i }
+		})
 		res.send(uniqNames)
 	} catch (error) {
 		console.error('Ошибка:', error)
@@ -194,6 +177,25 @@ musicRouter.get('/:id', async (req, res) => {
 			where: { id }
 		})
 		res.send(station.dataValues)
+	} catch (error) {
+		console.error('Ошибка:', error)
+	}
+})
+
+musicRouter.post('/', async (req, res) => {
+	try {
+		const { offset } = req.body
+		const results = await Station.findAll({
+			order: [
+				['votes', 'DESC'],
+				['lastcheckoktime', 'DESC']
+			],
+			limit: 5,
+			offset: offset
+		})
+
+		const topRadio = results.map(result => result.dataValues)
+		res.send(topRadio)
 	} catch (error) {
 		console.error('Ошибка:', error)
 	}
