@@ -1,6 +1,5 @@
-'use strict'
+s'use strict'
 const RadioBrowser = require('radio-browser')
-const { Station } = require('../models') // Путь к вашей модели
 
 module.exports = {
 	async up(queryInterface, Sequelize) {
