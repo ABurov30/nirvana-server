@@ -1,14 +1,14 @@
-const { Station, Sequelize } = require('../../db/models')
+const { Radio, Sequelize } = require('../../db/models')
 const { Op } = Sequelize
 
 async function uniqNames() {
-	const results = await Station.findAll({
+	const results = await Radio.findAll({
 		attributes: ['name'],
 		order: [
 			['votes', 'DESC'],
 			['lastcheckoktime', 'DESC']
 		],
-		limit: 15
+		limit: 10
 	})
 	return results.map((el, i) => {
 		return { label: el.name, key: i }
@@ -16,14 +16,14 @@ async function uniqNames() {
 }
 
 async function uniqTags() {
-	const results = await Station.findAll({
+	const results = await Radio.findAll({
 		attributes: [
 			'tags',
 			[Sequelize.fn('SUM', Sequelize.col('votes')), 'votesSum']
 		],
 		group: ['tags'],
 		order: [[Sequelize.col('votesSum'), 'DESC']],
-		limit: 20
+		limit: 10
 	})
 	const tags = results
 		.map(result => result.dataValues.tags)
@@ -45,7 +45,7 @@ async function uniqTags() {
 }
 
 async function uniqCountry() {
-	const results = await Station.findAll({
+	const results = await Radio.findAll({
 		attributes: [
 			'country',
 			[Sequelize.fn('SUM', Sequelize.col('votes')), 'votesSum']
@@ -63,7 +63,7 @@ async function uniqCountry() {
 }
 
 async function searchByName(name) {
-	const station = await Station.findOne({
+	const station = await Radio.findOne({
 		where: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), {
 			[Op.iLike]: `%${name.trim().toLowerCase()}%`
 		})
@@ -72,7 +72,7 @@ async function searchByName(name) {
 }
 
 async function searchByCountry(country) {
-	const result = await Station.findAll({
+	const result = await Radio.findAll({
 		where: Sequelize.where(
 			Sequelize.fn('LOWER', Sequelize.col('country')),
 			{
@@ -80,24 +80,24 @@ async function searchByCountry(country) {
 			}
 		),
 		order: [['votes', 'DESC']],
-		limit: 12
+		limit: 5
 	})
 	return result.map(el => el.dataValues)
 }
 
 async function searchByTags(tags) {
-	const result = await Station.findAll({
+	const result = await Radio.findAll({
 		where: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('tags')), {
 			[Op.iLike]: `%${tags.trim().toLowerCase()}%`
 		}),
 		order: [['votes', 'DESC']],
-		limit: 12
+		limit: 5
 	})
 	return result.map(el => el.dataValues)
 }
 
 async function searchByCountryAndTags(country, tags) {
-	const result = await Station.findAll({
+	const result = await Radio.findAll({
 		where: {
 			country: Sequelize.where(
 				Sequelize.fn('LOWER', Sequelize.col('country')),
@@ -113,13 +113,13 @@ async function searchByCountryAndTags(country, tags) {
 			)
 		},
 		order: [['votes', 'DESC']],
-		limit: 12
+		limit: 5
 	})
 	return result.map(el => el.dataValues)
 }
 
 async function searchByCountryAndTagsAndName(name, country, tags) {
-	const station = await Station.findOne({
+	const station = await Radio.findOne({
 		where: {
 			name: Sequelize.where(
 				Sequelize.fn('LOWER', Sequelize.col('name')),
@@ -145,14 +145,14 @@ async function searchByCountryAndTagsAndName(name, country, tags) {
 }
 
 async function findById(id) {
-	const station = await Station.findOne({
+	const station = await Radio.findOne({
 		where: { id }
 	})
 	return [station.dataValues]
 }
 
 async function topRadios(offset) {
-	const results = await Station.findAll({
+	const results = await Radio.findAll({
 		order: [
 			['votes', 'DESC'],
 			['lastcheckoktime', 'DESC']

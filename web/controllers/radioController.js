@@ -1,57 +1,57 @@
 const express = require('express')
-const { Station, Sequelize } = require('../../db/models')
+const { Sequelize } = require('../../db/models')
 const { Op } = Sequelize
-const musicService = require('../services/musicService')
+const radioService = require('../services/radioService')
 
-const musicController = express.Router()
+const radioController = express.Router()
 
-musicController.get('/uniqNames', async (req, res) => {
+radioController.get('/uniqNames', async (req, res) => {
 	try {
-		const uniqNames = await musicService.uniqNames()
+		const uniqNames = await radioService.uniqNames()
 		res.send(uniqNames)
 	} catch (error) {
 		console.error('Ошибка:', error)
 	}
 })
 
-musicController.get('/uniqGenre', async (req, res) => {
+radioController.get('/uniqGenre', async (req, res) => {
 	try {
-		const uniqueTags = await musicService.uniqTags()
+		const uniqueTags = await radioService.uniqTags()
 		res.send(uniqueTags)
 	} catch (error) {
 		console.error('Ошибка:', error)
 	}
 })
 
-musicController.get('/uniqCountry', async (req, res) => {
+radioController.get('/uniqCountry', async (req, res) => {
 	try {
-		const uniqCountry = await musicService.uniqCountry()
+		const uniqCountry = await radioService.uniqCountry()
 		res.send(uniqCountry)
 	} catch (error) {
 		console.error('Ошибка:', error)
 	}
 })
 
-musicController.post('/search', async (req, res) => {
+radioController.post('/search', async (req, res) => {
 	try {
 		const { name, country, tags } = req.body
 		if (name) {
-			const station = await musicService.searchByName(name)
+			const station = await radioService.searchByName(name)
 			res.send(station)
 		} else if (name === '' && country !== '' && tags === '') {
-			const stations = await musicService.searchByCountry(country)
+			const stations = await radioService.searchByCountry(country)
 			res.send(stations)
 		} else if (name === '' && country === '' && tags !== '') {
-			const stations = await musicService.searchByTags(tags)
+			const stations = await radioService.searchByTags(tags)
 			res.send(stations)
 		} else if (name === '' && country !== '' && tags !== '') {
-			const stations = await musicService.searchByCountryAndTags(
+			const stations = await radioService.searchByCountryAndTags(
 				country,
 				tags
 			)
 			res.send(stations)
 		} else {
-			const station = await musicService.searchByCountryAndTagsAndName(
+			const station = await radioService.searchByCountryAndTagsAndName(
 				name,
 				country,
 				tags
@@ -63,24 +63,24 @@ musicController.post('/search', async (req, res) => {
 	}
 })
 
-musicController.get('/:id', async (req, res) => {
+radioController.get('/:id', async (req, res) => {
 	try {
 		const { id } = req.params
-		const station = await musicService.findById(id)
+		const station = await radioService.findById(id)
 		res.send(station)
 	} catch (error) {
 		console.error('Ошибка:', error)
 	}
 })
 
-musicController.post('/', async (req, res) => {
+radioController.post('/', async (req, res) => {
 	try {
 		const { offset } = req.body
-		const topRadios = await musicService.topRadios(offset)
+		const topRadios = await radioService.topRadios(offset)
 		res.send(topRadios)
 	} catch (error) {
 		console.error('Ошибка:', error)
 	}
 })
 
-module.exports = musicController
+module.exports = radioController

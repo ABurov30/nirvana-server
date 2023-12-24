@@ -4,8 +4,10 @@ const cors = require('cors')
 const session = require('express-session')
 const store = require('session-file-store')
 const authController = require('./web/controllers/authController')
-const musicController = require('./web/controllers/musicController')
-const imagesController = require('./web/controllers/imagesController')
+const promoController = require('./web/controllers/promoController')
+const radioController = require('./web/controllers/radioController')
+const tracksController = require('./web/controllers/tracksController')
+// const EasyYandexS3 = require('easy-yandex-s3').default
 require('dotenv').config()
 
 const app = express()
@@ -35,8 +37,17 @@ app.use(session(sessionConfig))
 app.use(morgan('dev'))
 app.use(express.json())
 
-app.use('/api/music', musicController)
+app.use('/api/radio', radioController)
 app.use('/api/auth', authController)
-app.use('/api/images', imagesController)
+app.use('/api/promo', promoController)
+app.use('/api/track', tracksController)
 
 app.listen(PORT, () => console.log(`Server has started on PORT ${PORT}`))
+
+// let s3 = new EasyYandexS3({
+// 	auth: {
+// 		accessKeyId: process.env.ACCESS_KEY_ID,
+// 		secretAccessKey: process.env.SECRET_ACCESS_KEY
+// 	},
+// 	Bucket: 'nirvana-tracks'
+// })
