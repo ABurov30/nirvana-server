@@ -7,6 +7,7 @@ const authController = require('./web/controllers/authController')
 const promoController = require('./web/controllers/promoController')
 const radioController = require('./web/controllers/radioController')
 const tracksController = require('./web/controllers/tracksController')
+const favoriteController = require('./web/controllers/favoriteController')
 // const EasyYandexS3 = require('easy-yandex-s3').default
 require('dotenv').config()
 
@@ -41,6 +42,7 @@ app.use('/api/radio', radioController)
 app.use('/api/auth', authController)
 app.use('/api/promo', promoController)
 app.use('/api/track', tracksController)
+app.use('/api/favorite', favoriteController)
 
 app.listen(PORT, () => console.log(`Server has started on PORT ${PORT}`))
 

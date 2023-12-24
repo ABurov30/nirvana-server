@@ -22,22 +22,18 @@ authController.post('/signup', async (req, res) => {
 
 		return res.json(userWithoutPass)
 	} catch (e) {
-		console.log(e)
+		return res.status(401).json(e.message)
 	}
 })
 
 authController.post('/login', async (req, res) => {
 	try {
 		const { email, password } = req.body
-
 		const userWithoutPass = await authService.login(email, password)
-
 		req.session.user = userWithoutPass
-
 		return res.json(userWithoutPass)
 	} catch (e) {
-		console.log(e)
-		return res.status(401).send(e.message)
+		return res.status(401).json(e.message)
 	}
 })
 
@@ -47,7 +43,7 @@ authController.get('/logout', (req, res) => {
 		res.clearCookie('user_sid')
 		res.sendStatus(200)
 	} catch (e) {
-		console.log(e)
+		return res.status(401).send(e.message)
 	}
 })
 
@@ -58,7 +54,7 @@ authController.get('/check', async (req, res) => {
 		}
 		return res.status(401).send('Unauthorized')
 	} catch (e) {
-		console.log(e)
+		return res.status(401).send(e.message)
 	}
 })
 
