@@ -68,6 +68,40 @@ radioController.post('/search', async (req, res) => {
 	}
 })
 
+radioController.post('/intualSearchName', async (req, res) => {
+	try {
+		const { name } = req.body
+		const stationsTitles = await radioService.intualSearchName(name)
+		res.send(stationsTitles)
+	} catch (e) {
+		console.error('Ошибка:', e)
+		return res.status(500).send(e.message)
+	}
+})
+
+radioController.post('/intualSearchCountry', async (req, res) => {
+	try {
+		const { country } = req.body
+		const countryies = await radioService.intualSearchCountry(country)
+		res.send(countryies)
+	} catch (e) {
+		console.error('Ошибка:', e)
+		return res.status(500).send(e.message)
+	}
+})
+
+
+radioController.post('/intualSearchGenres', async (req, res) => {
+	try {
+		const { tags } = req.body
+		const genres = await radioService.intualSearchTags(tags)
+		res.send(genres)
+	} catch (e) {
+		console.error('Ошибка:', e)
+		return res.status(500).send(e.message)
+	}
+})
+
 radioController.post('/', async (req, res) => {
 	try {
 		const { offset, userId } = req.body

@@ -34,11 +34,11 @@ async function uniqTracks() {
 
 async function uniqArtists() {
 	try {
-		const results = await Track.findAll({
+		let results = await Track.findAll({
 			attributes: ['artist'],
 			limit: 10
 		})
-		return results.map((el, i) => {
+		return results?.map((el, i) => {
 			return { label: el.dataValues.artist, key: i }
 		})
 	} catch (e) {
@@ -69,6 +69,26 @@ async function searchByName(name, userId) {
 	}
 }
 
+async function intualSearchName(name) {
+	try {
+		const tracks = await Track.findAll({
+			where: Sequelize.where(
+				Sequelize.fn('LOWER', Sequelize.col('name')),
+				{
+					[Op.like]: `%${name.trim().toLowerCase()}%`
+				}
+			),
+			attributes: ['name'],
+			limit: 3
+		})
+		const res = tracks.map(track => track.dataValues.name)
+		return res
+	} catch (e) {
+		console.error(e)
+		throw e
+	}
+}
+
 async function searchByArtist(artist, userId) {
 	try {
 		const track = await Track.findOne({
@@ -84,6 +104,27 @@ async function searchByArtist(artist, userId) {
 			'track',
 			userId
 		)
+		return res
+	} catch (e) {
+		console.error(e)
+		throw e
+	}
+}
+
+async function intualSearchArtist(artist) {
+	try {
+		const artists = await Track.findAll({
+			where: Sequelize.where(
+				Sequelize.fn('LOWER', Sequelize.col('artist')),
+				{
+					[Op.like]: `%${artist.trim().toLowerCase()}%`
+				}
+			),
+			attributes: ['artist'],
+			limit: 3
+		})
+
+		const res = artists.map(artist => artist.dataValues.artist)
 		return res
 	} catch (e) {
 		console.error(e)
@@ -126,6 +167,8 @@ module.exports = {
 	uniqTracks,
 	uniqArtists,
 	searchByName,
+	intualSearchName,
 	searchByArtist,
+	intualSearchArtist,
 	searchByArtistAndName
 }

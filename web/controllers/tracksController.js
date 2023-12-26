@@ -3,17 +3,6 @@ const tracksService = require('../services/tracksService')
 
 const tracksController = express.Router()
 
-tracksController.post('/', async (req, res) => {
-	try {
-		const { offset, userId } = req.body
-		const tracks = await tracksService.getTrack(offset, userId)
-		res.send(tracks)
-	} catch (e) {
-		console.error('Ошибка:', e)
-		return res.status(500).send(e.message)
-	}
-})
-
 tracksController.get('/uniqTracks', async (req, res) => {
 	try {
 		const uniqTracks = await tracksService.uniqTracks()
@@ -51,6 +40,39 @@ tracksController.post('/search', async (req, res) => {
 			)
 			res.send(tracks)
 		}
+	} catch (e) {
+		console.error('Ошибка:', e)
+		return res.status(500).send(e.message)
+	}
+})
+
+tracksController.post('/intualSearchArtist', async (req, res) => {
+	try {
+		const { artist } = req.body
+		const artists = await tracksService.intualSearchArtist(artist)
+		res.send(artists)
+	} catch (e) {
+		console.error('Ошибка:', e)
+		return res.status(500).send(e.message)
+	}
+})
+
+tracksController.post('/intualSearchTrackTitle', async (req, res) => {
+	try {
+		const { trackTitle: name } = req.body
+		const tracks = await tracksService.intualSearchName(name)
+		res.send(tracks)
+	} catch (e) {
+		console.error('Ошибка:', e)
+		return res.status(500).send(e.message)
+	}
+})
+
+tracksController.post('/', async (req, res) => {
+	try {
+		const { offset, userId } = req.body
+		const tracks = await tracksService.getTrack(offset, userId)
+		res.send(tracks)
 	} catch (e) {
 		console.error('Ошибка:', e)
 		return res.status(500).send(e.message)

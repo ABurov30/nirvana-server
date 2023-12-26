@@ -101,9 +101,29 @@ async function searchByName(name, userId) {
 	}
 }
 
+async function intualSearchName(name) {
+	try {
+		const stations = await Radio.findAll({
+			where: Sequelize.where(
+				Sequelize.fn('LOWER', Sequelize.col('name')),
+				{
+					[Op.like]: `%${name.trim().toLowerCase()}%`
+				}
+			),
+			attributes: ['name'],
+			limit: 3
+		})
+		const res = stations.map(station => station.dataValues.name)
+		return res
+	} catch (e) {
+		console.error(e)
+		throw e
+	}
+}
+
 async function searchByCountry(country, userId) {
 	try {
-		const result = await Radio.findAll({
+		let results = await Radio.findAll({
 			where: Sequelize.where(
 				Sequelize.fn('LOWER', Sequelize.col('country')),
 				{
@@ -113,11 +133,28 @@ async function searchByCountry(country, userId) {
 			order: [['votes', 'DESC']],
 			limit: 5
 		})
-		const res = await trackMapper.toClient(
-			result.dataValues,
-			'radio',
-			userId
-		)
+		results = results.map(result => result.dataValues)
+		const res = await trackMapper.toClient(results, 'radio', userId)
+		return res
+	} catch (e) {
+		console.error(e)
+		throw e
+	}
+}
+
+async function intualSearchCountry(country) {
+	try {
+		const countries = await Radio.findAll({
+			where: Sequelize.where(
+				Sequelize.fn('LOWER', Sequelize.col('country')),
+				{
+					[Op.like]: `%${country.trim().toLowerCase()}%`
+				}
+			),
+			attributes: ['country'],
+			limit: 3
+		})
+		const res = countries.map(country => country.dataValues.country)
 		return res
 	} catch (e) {
 		console.error(e)
@@ -127,7 +164,7 @@ async function searchByCountry(country, userId) {
 
 async function searchByTags(tags, userId) {
 	try {
-		const result = await Radio.findAll({
+		let results = await Radio.findAll({
 			where: Sequelize.where(
 				Sequelize.fn('LOWER', Sequelize.col('tags')),
 				{
@@ -137,12 +174,44 @@ async function searchByTags(tags, userId) {
 			order: [['votes', 'DESC']],
 			limit: 5
 		})
-		const res = await trackMapper.toClient(
-			result.dataValues,
-			'radio',
-			userId
-		)
+		results = results.map(result => result.dataValues)
+		const res = await trackMapper.toClient(results, 'radio', userId)
 		return res
+	} catch (e) {
+		console.error(e)
+		throw e
+	}
+}
+
+async function intualSearchTags(tags) {
+	try {
+		const genres = await Radio.findAll({
+			where: Sequelize.where(
+				Sequelize.fn('LOWER', Sequelize.col('tags')),
+				{
+					[Op.like]: `%${tags.trim().toLowerCase()}%`
+				}
+			),
+			attributes: ['tags'],
+			limit: 3
+		})
+		const res = genres
+			.map(genre => genre.dataValues.tags)
+			.join(' ')
+			.split(' ')
+			.join(',')
+			.split(',')
+			.filter(
+				str =>
+					str.length > 2 &&
+					str.length < 15 &&
+					!str.includes('fm') &&
+					!str.includes('radio')
+			)
+		let uniqueTags = [...new Set(res)]
+		return uniqueTags.map((el, i) => {
+			return { label: el, key: i }
+		})
 	} catch (e) {
 		console.error(e)
 		throw e
@@ -151,7 +220,7 @@ async function searchByTags(tags, userId) {
 
 async function searchByCountryAndTags(country, tags, userId) {
 	try {
-		const result = await Radio.findAll({
+		let results = await Radio.findAll({
 			where: {
 				country: Sequelize.where(
 					Sequelize.fn('LOWER', Sequelize.col('country')),
@@ -169,11 +238,8 @@ async function searchByCountryAndTags(country, tags, userId) {
 			order: [['votes', 'DESC']],
 			limit: 5
 		})
-		const res = await trackMapper.toClient(
-			result.dataValues,
-			'radio',
-			userId
-		)
+		results = results.map(result => result.dataValues)
+		const res = await trackMapper.toClient(results, 'radio', userId)
 		return res
 	} catch (e) {
 		console.error(e)
@@ -242,8 +308,11 @@ module.exports = {
 	uniqTags,
 	uniqCountry,
 	searchByName,
+	intualSearchName,
 	searchByCountry,
+	intualSearchCountry,
 	searchByTags,
+	intualSearchTags,
 	searchByCountryAndTags,
 	searchByCountryAndTagsAndName
 }
