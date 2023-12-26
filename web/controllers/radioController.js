@@ -9,6 +9,7 @@ radioController.get('/uniqNames', async (req, res) => {
 		const uniqNames = await radioService.uniqNames()
 		res.send(uniqNames)
 	} catch (e) {
+		console.error('Ошибка:', e)
 		return res.status(500).send(e.message)
 	}
 })
@@ -18,6 +19,7 @@ radioController.get('/uniqGenre', async (req, res) => {
 		const uniqueTags = await radioService.uniqTags()
 		res.send(uniqueTags)
 	} catch (e) {
+		console.error('Ошибка:', e)
 		return res.status(500).send(e.message)
 	}
 })
@@ -27,6 +29,7 @@ radioController.get('/uniqCountry', async (req, res) => {
 		const uniqCountry = await radioService.uniqCountry()
 		res.send(uniqCountry)
 	} catch (e) {
+		console.error('Ошибка:', e)
 		return res.status(500).send(e.message)
 	}
 })
@@ -60,6 +63,7 @@ radioController.post('/search', async (req, res) => {
 			res.send(station)
 		}
 	} catch (e) {
+		console.error('Ошибка:', e)
 		return res.status(500).send(e.message)
 	}
 })

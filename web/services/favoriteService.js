@@ -4,7 +4,6 @@ const { v4: uuidv4 } = require('uuid')
 
 async function add(trackId, userId, type) {
 	try {
-		console.log('try--------------')
 		if (type === 'radio') {
 			const res = await Favorite.create({
 				id: uuidv4(),

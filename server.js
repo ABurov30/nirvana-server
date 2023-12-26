@@ -45,11 +45,3 @@ app.use('/api/track', tracksController)
 app.use('/api/favorite', favoriteController)
 
 app.listen(PORT, () => console.log(`Server has started on PORT ${PORT}`))
-
-// let s3 = new EasyYandexS3({
-// 	auth: {
-// 		accessKeyId: process.env.ACCESS_KEY_ID,
-// 		secretAccessKey: process.env.SECRET_ACCESS_KEY
-// 	},
-// 	Bucket: 'nirvana-tracks'
-// })
