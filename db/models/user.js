@@ -7,7 +7,9 @@ module.exports = (sequelize, DataTypes) => {
 		{
 			nickname: DataTypes.STRING,
 			email: DataTypes.STRING,
-			hashpass: DataTypes.STRING
+			hashpass: DataTypes.STRING,
+			confirmationCode: DataTypes.STRING,
+			confirmed: DataTypes.BOOLEAN
 		},
 		{
 			sequelize,

@@ -17,6 +17,13 @@ module.exports = {
 			hashpass: {
 				type: Sequelize.STRING
 			},
+			confirmationCode: {
+				type: Sequelize.STRING
+			},
+			confirmed: {
+				type: Sequelize.BOOLEAN,
+				defaultValue: false
+			},
 			createdAt: {
 				allowNull: false,
 				type: Sequelize.DATE,

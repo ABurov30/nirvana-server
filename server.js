@@ -8,7 +8,6 @@ const promoController = require('./web/controllers/promoController')
 const radioController = require('./web/controllers/radioController')
 const tracksController = require('./web/controllers/tracksController')
 const favoriteController = require('./web/controllers/favoriteController')
-// const EasyYandexS3 = require('easy-yandex-s3').default
 require('dotenv').config()
 
 const app = express()

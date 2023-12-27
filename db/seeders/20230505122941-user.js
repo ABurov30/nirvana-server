@@ -10,7 +10,8 @@ module.exports = {
 					id: uuidv4(),
 					email: 'aaa@a',
 					nickname: 'aaa',
-					hashpass: `${await bcrypt.hash('123', 10)}`
+					hashpass: `${await bcrypt.hash('123', 10)}`,
+					confirmed: true
 				}
 			],
 			{}
