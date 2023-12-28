@@ -8,13 +8,14 @@ const promoController = require('./web/controllers/promoController')
 const radioController = require('./web/controllers/radioController')
 const tracksController = require('./web/controllers/tracksController')
 const favoriteController = require('./web/controllers/favoriteController')
+const helmet = require('helmet')
 require('dotenv').config()
 
 const app = express()
 const PORT = process.env.PORT || 3001
 
 const FileStore = store(session)
-
+var expiryDate = new Date(Date.now() + 60 * 60 * 1000)
 const sessionConfig = {
 	name: 'user_sid',
 	secret: process.env.SESSION_SECRET ?? 'test',
@@ -22,8 +23,9 @@ const sessionConfig = {
 	store: new FileStore(),
 	saveUninitialized: false,
 	cookie: {
-		maxAge: 1000 * 60 * 60 * 12,
-		httpOnly: true
+		httpOnly: true,
+		secure: true,
+		expires: expiryDate
 	}
 }
 
@@ -33,6 +35,8 @@ app.use(
 		origin: true
 	})
 )
+app.use(helmet())
+app.set('trust proxy', 1)
 app.use(session(sessionConfig))
 app.use(morgan('dev'))
 app.use(express.json())

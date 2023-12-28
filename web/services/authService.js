@@ -94,10 +94,13 @@ async function findEmail(email) {
 			throw new Error('No such e-mail')
 		}
 
-		const confirmationCode = uuidv4()
+		const confirmationCode = Math.floor(100000 + Math.random() * 900000)
 
 		foundUser.confirmationCode = confirmationCode
-		await User.update({ confirmationCode }, { where: { id: foundUser.id } })
+		await User.update(
+			{ confirmationCode: String(confirmationCode) },
+			{ where: { id: foundUser.id } }
+		)
 
 		await mailerService.sendEmail(
 			foundUser,

@@ -83,11 +83,9 @@ authController.get('/reset/:confirmationCode', async (req, res) => {
 
 		const user = await authService.reset(confirmationCode)
 		if (user) {
-			res.redirect(`http://localhost:5173/${user.id}`)
+			res.status(200).json({ userId: user.id })
 		} else {
-			res.redirect('http://localhost:5173')
-				.status(401)
-				.json('Wrong link, please try again')
+			res.status(401).json('Wrong code, please try again')
 		}
 	} catch (e) {
 		console.error('Ошибка:', e)

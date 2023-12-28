@@ -1,8 +1,7 @@
-const changePassword = uuid => {
+const changePassword = code => {
 	return {
 		subject: 'Код подтверждения',
-		html: `<p>Перейди по этой разовой ссылке для изменения пароля: 
-     <a href="http://localhost:3003/api/auth/reset/${uuid}">ссылка для подверждения</a>`
+		html: `<p>Ваш код смены пароля: ${code}"</p>`
 	}
 }
 
