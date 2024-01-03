@@ -1,8 +1,8 @@
 const express = require('express')
-const { Sequelize } = require('../../db/models')
 const favoriteService = require('../services/favoriteService')
 
 const favoriteController = express.Router()
+
 
 favoriteController.post('/add', async (req, res) => {
 	try {

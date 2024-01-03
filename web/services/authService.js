@@ -56,8 +56,9 @@ async function login(email, password) {
 		}
 
 		if (await bcrypt.compare(password, foundUser.hashpass)) {
-			const { id, nickname, email, confirmed } = foundUser.dataValues
+			const { id, nickname, email, confirmed } = foundUser
 			const userWithoutPassword = { id, nickname, email, confirmed }
+			console.log(userWithoutPassword)
 			return userWithoutPassword
 		}
 

@@ -15,17 +15,16 @@ const app = express()
 const PORT = process.env.PORT || 3001
 
 const FileStore = store(session)
-var expiryDate = new Date(Date.now() + 60 * 60 * 1000)
+
 const sessionConfig = {
-	name: 'user_sid',
+	name: 'user_id',
 	secret: process.env.SESSION_SECRET ?? 'test',
 	resave: true,
 	store: new FileStore(),
 	saveUninitialized: false,
 	cookie: {
-		httpOnly: true,
-		secure: true,
-		expires: expiryDate
+		maxAge: 1000 * 60 * 60,
+		httpOnly: true
 	}
 }
 
@@ -36,7 +35,6 @@ app.use(
 	})
 )
 app.use(helmet())
-app.set('trust proxy', 1)
 app.use(session(sessionConfig))
 app.use(morgan('dev'))
 app.use(express.json())

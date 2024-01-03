@@ -8,17 +8,17 @@ module.exports = {
 				{
 					id: uuidv4(),
 					favicon:
-						'https://storage.yandexcloud.net/nirvana-tracks/promo/pexels-ketut-subiyanto-4651046%20(1).jpg'
+						'https://storage.yandexcloud.net/nirvana-tracks/promo/pexels-ketut-subiyanto-4651046%20(1)%20(1).jpg'
 				},
 				{
 					id: uuidv4(),
 					favicon:
-						'https://storage.yandexcloud.net/nirvana-tracks/promo/pexels-marcelo-chagas-1876279.jpg'
+						'https://storage.yandexcloud.net/nirvana-tracks/promo/pexels-marcelo-chagas-1876279%20(1).jpg'
 				},
 				{
 					id: uuidv4(),
 					favicon:
-						'https://storage.yandexcloud.net/nirvana-tracks/promo/pexels-martin-lopez-2240772%20(1).jpg'
+						'https://storage.yandexcloud.net/nirvana-tracks/promo/pexels-martin-lopez-2240772%20(1)%20(1).jpg'
 				}
 			],
 			{}
