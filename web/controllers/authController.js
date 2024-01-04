@@ -54,7 +54,6 @@ authController.get('/logout', (req, res) => {
 
 authController.get('/check', async (req, res) => {
 	try {
-		console.log(req.session)
 		if (req.session?.user?.id) {
 			return res.json(req.session.user)
 		}

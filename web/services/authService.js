@@ -22,8 +22,9 @@ async function signup(nickname, email, password) {
 		})
 
 		if (!created && !foundUser.confirmed)
-			return res.status(401).send('Confirm your e-mail')
-		if (!created) return res.status(401).send('Email is in use')
+			throw new Error('Confirm your e-mail')
+
+		if (!created) throw new Error('Email is in use')
 
 		const { id } = foundUser
 		const userWithoutPass = {
@@ -58,7 +59,6 @@ async function login(email, password) {
 		if (await bcrypt.compare(password, foundUser.hashpass)) {
 			const { id, nickname, email, confirmed } = foundUser
 			const userWithoutPassword = { id, nickname, email, confirmed }
-			console.log(userWithoutPassword)
 			return userWithoutPassword
 		}
 
