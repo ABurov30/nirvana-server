@@ -3,8 +3,7 @@ const favoriteService = require('../services/favoriteService')
 
 const favoriteController = express.Router()
 
-
-favoriteController.post('/add', async (req, res) => {
+favoriteController.post('/', async (req, res) => {
 	try {
 		const { id: trackId, userId, type } = req.body
 		await favoriteService.add(trackId, userId, type)
@@ -15,7 +14,7 @@ favoriteController.post('/add', async (req, res) => {
 	}
 })
 
-favoriteController.post('/remove', async (req, res) => {
+favoriteController.delete('/', async (req, res) => {
 	try {
 		const { id: trackId, userId, type } = req.body
 		await favoriteService.remove(trackId, userId, type)

@@ -87,6 +87,33 @@ async function confirm(confirmationCode) {
 	}
 }
 
+async function deleteUser(userId) {
+	try {
+		await User.destroy({ where: { id: userId } })
+	} catch (e) {
+		console.error(e)
+		throw e
+	}
+}
+
+async function editUserInfo(name, mail, userId) {
+	try {
+		console.log(name, mail, 'email')
+		const foundUser = await User.findOne({
+			where: {
+				id: userId
+			}
+		})
+		foundUser.update({ email: mail, nickname: name })
+		const { id, nickname, email, confirmed } = foundUser.dataValues
+		const userWithoutPassword = { id, nickname, email, confirmed }
+		return userWithoutPassword
+	} catch (e) {
+		console.error(e)
+		throw e
+	}
+}
+
 async function findEmail(email) {
 	try {
 		const foundUser = await User.findOne({ where: { email } })
@@ -145,5 +172,7 @@ module.exports = {
 	confirm,
 	findEmail,
 	reset,
-	newPassword
+	newPassword,
+	deleteUser,
+	editUserInfo
 }

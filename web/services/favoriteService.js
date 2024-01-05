@@ -29,9 +29,23 @@ async function add(trackId, userId, type) {
 
 async function remove(id, userId, type) {
 	try {
-		await Favorite.destroy({
-			where: { radioId: id, userId: userId, type: type }
-		})
+		if (type === 'radio') {
+			await Favorite.destroy({
+				where: { radioId: id, userId: userId }
+			})
+		} else if (type === 'track') {
+			await Favorite.destroy({
+				where: { trackId: id, userId: userId }
+			})
+		} else {
+			throw Error('Invalid type')
+		}
+		console.log(
+			'Removing-------------------------------------',
+			id,
+			userId,
+			type
+		)
 	} catch (e) {
 		console.error(e)
 		throw e

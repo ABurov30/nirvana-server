@@ -1,9 +1,6 @@
 const express = require('express')
 const authService = require('../services/authService')
 
-const { v4: uuidv4 } = require('uuid')
-const { User } = require('../../db/models')
-
 const authController = express.Router()
 
 authController.post('/signup', async (req, res) => {
@@ -11,6 +8,35 @@ authController.post('/signup', async (req, res) => {
 		const { nickname, email, password } = req.body
 		await authService.signup(nickname, email, password)
 		return res.status(200).json('Email sent successfully')
+	} catch (e) {
+		console.error('Ошибка:', e)
+		return res.status(401).json(e.message)
+	}
+})
+
+authController.delete('/', async (req, res) => {
+	try {
+		const { userId } = req.body
+		await authService.deleteUser(userId)
+		req.session.destroy()
+		res.clearCookie('user_id')
+		res.sendStatus(200)
+	} catch (e) {
+		console.error('Ошибка:', e)
+		return res.status(401).json(e.message)
+	}
+})
+
+authController.put('/userInfo', async (req, res) => {
+	try {
+		const { nickname, email, userId } = req.body
+		const userWithoutPass = await authService.editUserInfo(
+			nickname,
+			email,
+			userId
+		)
+		req.session.user = userWithoutPass
+		res.json(userWithoutPass)
 	} catch (e) {
 		console.error('Ошибка:', e)
 		return res.status(401).json(e.message)
@@ -44,7 +70,7 @@ authController.post('/login', async (req, res) => {
 authController.get('/logout', (req, res) => {
 	try {
 		req.session.destroy()
-		res.clearCookie('user_sid')
+		res.clearCookie('user_id')
 		res.sendStatus(200)
 	} catch (e) {
 		console.error('Ошибка:', e)
