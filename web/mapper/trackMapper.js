@@ -13,7 +13,7 @@ async function toClient(tracks, type, userId) {
 				return {
 					id: track?.id,
 					title: track?.name,
-					subTitle: track?.artist,
+					subTitle: type === 'track' ? track?.artist : track?.country,
 					url: track?.url,
 					img: track?.favicon,
 					type: type,

@@ -1,5 +1,6 @@
 const express = require('express')
 const favoriteService = require('../services/favoriteService')
+const trackMapper = require('../mapper/trackMapper')
 
 const favoriteController = express.Router()
 
@@ -8,6 +9,18 @@ favoriteController.post('/', async (req, res) => {
 		const { id: trackId, userId, type } = req.body
 		await favoriteService.add(trackId, userId, type)
 		res.sendStatus(200)
+	} catch (e) {
+		console.error(e)
+		return res.status(500).send(e.message)
+	}
+})
+
+favoriteController.post('/all', async (req, res) => {
+	try {
+		const { offset, userId, type } = req.body
+		const favorites = await favoriteService.findAll(offset, userId, type)
+		const result = await trackMapper.toClient(favorites, type, userId)
+		res.json(result)
 	} catch (e) {
 		console.error(e)
 		return res.status(500).send(e.message)
