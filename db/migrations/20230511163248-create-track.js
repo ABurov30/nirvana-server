@@ -6,19 +6,24 @@ module.exports = {
 				allowNull: false,
 				primaryKey: true,
 				type: Sequelize.UUID,
-				defaultValue: Sequelize.UUIDV4
+				defaultValue: Sequelize.UUIDV4,
+				isUUID: 4
 			},
 			name: {
-				type: Sequelize.TEXT
+				type: Sequelize.TEXT,
+				allowNull: false
 			},
 			artist: {
-				type: Sequelize.TEXT
+				type: Sequelize.TEXT,
+				allowNull: false
 			},
 			url: {
-				type: Sequelize.TEXT
+				type: Sequelize.TEXT,
+				allowNull: false
 			},
 			favicon: {
-				type: Sequelize.TEXT
+				type: Sequelize.TEXT,
+				allowNull: false
 			},
 			createdAt: {
 				allowNull: false,

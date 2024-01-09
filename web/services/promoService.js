@@ -1,4 +1,4 @@
-const { Promo, Sequelize } = require('../../db/models')
+const { Promo } = require('../../db/models')
 
 async function getPromo() {
 	try {

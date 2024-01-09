@@ -6,7 +6,8 @@ module.exports = {
 				allowNull: false,
 				primaryKey: true,
 				type: Sequelize.UUID,
-				defaultValue: Sequelize.UUIDV4
+				defaultValue: Sequelize.UUIDV4,
+				isUUID: 4
 			},
 			trackId: {
 				type: Sequelize.UUID,
@@ -14,6 +15,7 @@ module.exports = {
 					model: 'Tracks',
 					key: 'id'
 				},
+				isUUID: 4,
 				unique: 'compositeKeyTrackUserId'
 			},
 			radioId: {
@@ -22,6 +24,7 @@ module.exports = {
 					model: 'Radios',
 					key: 'id'
 				},
+				isUUID: 4,
 				unique: 'compositeKeyRadioUserId'
 			},
 			userId: {
@@ -30,6 +33,7 @@ module.exports = {
 					model: 'Users',
 					key: 'id'
 				},
+				isUUID: 4,
 				unique: 'compositeKeyTrackUserId',
 				unique: 'compositeKeyRadioUserId'
 			},

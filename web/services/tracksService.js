@@ -1,6 +1,7 @@
 const { Track, Sequelize } = require('../../db/models')
 const { Op } = Sequelize
 const trackMapper = require('../mapper/trackMapper')
+const { v4: uuidv4 } = require('uuid')
 
 async function getTrack(offset, userId) {
 	try {
@@ -162,6 +163,22 @@ async function searchByArtistAndName(name, artist, userId) {
 	}
 }
 
+async function addTrack({ artist, trackName, img, mp3 }) {
+	try {
+		console.log(img, mp3, '--------------dsafdsafds------------------')
+		await Track.create({
+			id: uuidv4(),
+			name: trackName,
+			favicon: img,
+			artist: artist,
+			url: mp3
+		})
+	} catch (e) {
+		console.error(e)
+		throw e
+	}
+}
+
 module.exports = {
 	getTrack,
 	uniqTracks,
@@ -170,5 +187,6 @@ module.exports = {
 	intualSearchName,
 	searchByArtist,
 	intualSearchArtist,
-	searchByArtistAndName
+	searchByArtistAndName,
+	addTrack
 }

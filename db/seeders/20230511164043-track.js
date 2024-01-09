@@ -44,30 +44,6 @@ module.exports = {
 					url: 'https://storage.yandexcloud.net/nirvana-tracks/mp3/May%20Wave%24%20-%20%D0%94%D1%80%D1%83%D0%B6%D0%B1%D0%B0.mp3',
 					favicon:
 						'https://storage.yandexcloud.net/nirvana-tracks/img/%D0%94%D1%80%D1%83%D0%B6%D0%B1%D0%B0.jpg'
-				},
-				{
-					id: uuidv4(),
-					name: 'Nirvana',
-					artist: 'Skepta, J Balvin',
-					url: 'https://storage.yandexcloud.net/nirvana-tracks/mp3/Skepta%2C%20J%20Balvin%20-%20Nirvana.mp3',
-					favicon:
-						'https://storage.yandexcloud.net/nirvana-tracks/img/affcab290b1470d11cdc0086bfc7aa23.999x999x1.png'
-				},
-				{
-					id: uuidv4(),
-					name: 'Peace of Mind',
-					artist: 'Skepta, Teezee, Kid Cudi',
-					url: 'https://storage.yandexcloud.net/nirvana-tracks/mp3/Skepta%2C%20Teezee%2C%20Kid%20Cudi%20-%20Peace%20of%20Mind.mp3',
-					favicon:
-						'https://storage.yandexcloud.net/nirvana-tracks/img/affcab290b1470d11cdc0086bfc7aa23.999x999x1.png'
-				},
-				{
-					id: uuidv4(),
-					name: 'Это любовь',
-					artist: 'Скриптонит',
-					url: 'https://storage.yandexcloud.net/nirvana-tracks/mp3/%D0%A1%D0%BA%D1%80%D0%B8%D0%BF%D1%82%D0%BE%D0%BD%D0%B8%D1%82%20-%20%D0%AD%D1%82%D0%BE%20%D0%BB%D1%8E%D0%B1%D0%BE%D0%B2%D1%8C.mp3',
-					favicon:
-						'https://storage.yandexcloud.net/nirvana-tracks/img/85fe67bb27fa69d1593d983aa48a64be.1000x1000x1.png'
 				}
 			],
 			{}

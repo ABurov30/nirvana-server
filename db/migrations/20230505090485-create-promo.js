@@ -6,7 +6,8 @@ module.exports = {
 				allowNull: false,
 				primaryKey: true,
 				type: Sequelize.UUID,
-				defaultValue: Sequelize.UUIDV4
+				defaultValue: Sequelize.UUIDV4,
+				isUUID: 4
 			},
 			favicon: {
 				type: Sequelize.TEXT

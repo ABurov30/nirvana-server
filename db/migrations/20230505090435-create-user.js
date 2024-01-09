@@ -6,14 +6,16 @@ module.exports = {
 				allowNull: false,
 				primaryKey: true,
 				type: Sequelize.UUID,
-				defaultValue: Sequelize.UUIDV4
+				defaultValue: Sequelize.UUIDV4,
+				isUUID: 4
 			},
 			nickname: {
 				type: Sequelize.STRING
 			},
 			email: {
 				type: Sequelize.STRING,
-				unique: true
+				unique: true,
+				isEmail: true
 			},
 			hashpass: {
 				type: Sequelize.STRING

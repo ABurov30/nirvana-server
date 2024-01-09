@@ -1,19 +1,17 @@
-const { ids } = require('webpack')
 const { Favorite, Radio, Track } = require('../../db/models')
 const { v4: uuidv4 } = require('uuid')
-const TrackMapper = require('../mapper/trackMapper')
 
 async function add(trackId, userId, type) {
 	try {
 		if (type === 'radio') {
-			const res = await Favorite.create({
+			await Favorite.create({
 				id: uuidv4(),
 				radioId: trackId,
 				userId: userId,
 				type: type
 			})
 		} else if (type === 'track') {
-			const res = await Favorite.create({
+			await Favorite.create({
 				id: uuidv4(),
 				trackId: trackId,
 				userId: userId,

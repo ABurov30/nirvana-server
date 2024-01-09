@@ -1,5 +1,11 @@
 const express = require('express')
 const tracksService = require('../services/tracksService')
+const cloudService = require('../services/cloudService')
+const multer = require('multer')
+const storage = multer.memoryStorage()
+const { sequelize } = require('../../db/models')
+
+const upload = multer({ storage: storage })
 
 const tracksController = express.Router()
 
@@ -67,6 +73,35 @@ tracksController.post('/intualSearchTrackTitle', async (req, res) => {
 		return res.status(500).send(e.message)
 	}
 })
+
+tracksController.post(
+	'/uploadTrack',
+	upload.fields([
+		{ name: 'cover', maxCount: 1 },
+		{ name: 'track', maxCount: 1 }
+	]),
+	async (req, res) => {
+		const t = await sequelize.transaction()
+		try {
+			const { trackName, artist } = req.body
+
+			const cover = req.files?.cover[0]?.buffer
+			const track = req.files?.track[0]?.buffer
+
+			const { img, mp3 } = await cloudService.upload({
+				track,
+				cover
+			})
+			await tracksService.addTrack({ artist, trackName, img, mp3 })
+			await t.commit()
+			res.status(200)
+		} catch (e) {
+			console.error('Ошибка:', e)
+			await t.rollback()
+			return res.status(500).send(e.message)
+		}
+	}
+)
 
 tracksController.post('/', async (req, res) => {
 	try {
