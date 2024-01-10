@@ -9,8 +9,7 @@ radioController.get('/uniqNames', async (req, res) => {
 		const uniqNames = await radioService.uniqNames()
 		res.send(uniqNames)
 	} catch (e) {
-		console.error('Ошибка:', e)
-		return res.status(500).send(e.message)
+		next(e)
 	}
 })
 
@@ -19,8 +18,7 @@ radioController.get('/uniqGenre', async (req, res) => {
 		const uniqueTags = await radioService.uniqTags()
 		res.send(uniqueTags)
 	} catch (e) {
-		console.error('Ошибка:', e)
-		return res.status(500).send(e.message)
+		next(e)
 	}
 })
 
@@ -29,8 +27,7 @@ radioController.get('/uniqCountry', async (req, res) => {
 		const uniqCountry = await radioService.uniqCountry()
 		res.send(uniqCountry)
 	} catch (e) {
-		console.error('Ошибка:', e)
-		return res.status(500).send(e.message)
+		next(e)
 	}
 })
 
@@ -63,8 +60,7 @@ radioController.post('/search', async (req, res) => {
 			res.send(station)
 		}
 	} catch (e) {
-		console.error('Ошибка:', e)
-		return res.status(500).send(e.message)
+		next(e)
 	}
 })
 
@@ -74,8 +70,7 @@ radioController.post('/intualSearchName', async (req, res) => {
 		const stationsTitles = await radioService.intualSearchName(name)
 		res.send(stationsTitles)
 	} catch (e) {
-		console.error('Ошибка:', e)
-		return res.status(500).send(e.message)
+		next(e)
 	}
 })
 
@@ -85,8 +80,7 @@ radioController.post('/intualSearchCountry', async (req, res) => {
 		const countryies = await radioService.intualSearchCountry(country)
 		res.send(countryies)
 	} catch (e) {
-		console.error('Ошибка:', e)
-		return res.status(500).send(e.message)
+		next(e)
 	}
 })
 
@@ -96,8 +90,7 @@ radioController.post('/intualSearchGenres', async (req, res) => {
 		const genres = await radioService.intualSearchTags(tags)
 		res.send(genres)
 	} catch (e) {
-		console.error('Ошибка:', e)
-		return res.status(500).send(e.message)
+		next(e)
 	}
 })
 
@@ -107,7 +100,7 @@ radioController.post('/', async (req, res) => {
 		const topRadios = await radioService.topRadios(offset, userId)
 		res.send(topRadios)
 	} catch (e) {
-		return res.status(500).send(e.message)
+		next(e)
 	}
 })
 

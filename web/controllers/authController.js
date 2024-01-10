@@ -9,8 +9,7 @@ authController.post('/signup', async (req, res) => {
 		await authService.signup(nickname, email, password)
 		return res.status(200).json('Email sent successfully')
 	} catch (e) {
-		console.error('Ошибка:', e)
-		return res.status(401).json(e.message)
+		next(e)
 	}
 })
 
@@ -22,8 +21,7 @@ authController.delete('/', async (req, res) => {
 		res.clearCookie('user_id')
 		res.sendStatus(200)
 	} catch (e) {
-		console.error('Ошибка:', e)
-		return res.status(401).json(e.message)
+		next(e)
 	}
 })
 
@@ -38,8 +36,7 @@ authController.put('/userInfo', async (req, res) => {
 		req.session.user = userWithoutPass
 		res.json(userWithoutPass)
 	} catch (e) {
-		console.error('Ошибка:', e)
-		return res.status(401).json(e.message)
+		next(e)
 	}
 })
 
@@ -50,8 +47,7 @@ authController.get('/confirm/:confirmationCode', async (req, res) => {
 		req.session.user = foundUser
 		res.redirect('http://localhost:5173')
 	} catch (e) {
-		console.error('Ошибка:', e)
-		return res.status(401).json(e.message)
+		next(e)
 	}
 })
 
@@ -62,8 +58,7 @@ authController.post('/login', async (req, res) => {
 		req.session.user = userWithoutPass
 		return res.json(userWithoutPass)
 	} catch (e) {
-		console.error('Ошибка:', e)
-		return res.status(401).json(e.message)
+		next(e)
 	}
 })
 
@@ -73,8 +68,7 @@ authController.get('/logout', (req, res) => {
 		res.clearCookie('user_id')
 		res.sendStatus(200)
 	} catch (e) {
-		console.error('Ошибка:', e)
-		return res.status(401).send(e.message)
+		next(e)
 	}
 })
 
@@ -85,8 +79,7 @@ authController.get('/check', async (req, res) => {
 		}
 		return res.status(401).send('Unauthorized')
 	} catch (e) {
-		console.error('Ошибка:', e)
-		return res.status(401).send(e.message)
+		next(e)
 	}
 })
 
@@ -98,8 +91,7 @@ authController.post('/findEmail', async (req, res) => {
 			.status(200)
 			.json('E-mail sent successfully. Check it to reset password')
 	} catch (e) {
-		console.error('Ошибка:', e)
-		return res.status(401).send(e.message)
+		next(e)
 	}
 })
 
@@ -114,8 +106,7 @@ authController.get('/reset/:confirmationCode', async (req, res) => {
 			res.status(401).json('Wrong code, please try again')
 		}
 	} catch (e) {
-		console.error('Ошибка:', e)
-		return res.status(401).send(e.message)
+		next(e)
 	}
 })
 
@@ -126,8 +117,7 @@ authController.post('/newPassword', async (req, res) => {
 		req.session.user = user
 		return res.json(user)
 	} catch (e) {
-		console.error(e)
-		return res.status(401).send(e.message)
+		next(e)
 	}
 })
 

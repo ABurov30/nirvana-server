@@ -3,6 +3,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 const session = require('express-session')
 const store = require('session-file-store')
+
 const authController = require('./web/controllers/authController')
 const promoController = require('./web/controllers/promoController')
 const radioController = require('./web/controllers/radioController')
@@ -10,6 +11,7 @@ const tracksController = require('./web/controllers/tracksController')
 const favoriteController = require('./web/controllers/favoriteController')
 
 const helmet = require('helmet')
+const { errorHandler } = require('./web/middleware/errorHandler')
 require('dotenv').config()
 
 const app = express()
@@ -39,6 +41,7 @@ app.use(helmet())
 app.use(session(sessionConfig))
 app.use(morgan('dev'))
 app.use(express.json())
+app.use(errorHandler)
 
 app.use('/api/radio', radioController)
 app.use('/api/auth', authController)

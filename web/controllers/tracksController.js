@@ -14,8 +14,7 @@ tracksController.get('/uniqTracks', async (req, res) => {
 		const uniqTracks = await tracksService.uniqTracks()
 		res.send(uniqTracks)
 	} catch (e) {
-		console.error('Ошибка:', e)
-		return res.status(500).send(e.message)
+		next(e)
 	}
 })
 
@@ -24,8 +23,7 @@ tracksController.get('/uniqArtists', async (req, res) => {
 		const uniqArtists = await tracksService.uniqArtists()
 		res.send(uniqArtists)
 	} catch (e) {
-		console.error('Ошибка:', e)
-		return res.status(500).send(e.message)
+		next(e)
 	}
 })
 
@@ -47,8 +45,7 @@ tracksController.post('/search', async (req, res) => {
 			res.send(tracks)
 		}
 	} catch (e) {
-		console.error('Ошибка:', e)
-		return res.status(500).send(e.message)
+		next(e)
 	}
 })
 
@@ -58,19 +55,17 @@ tracksController.post('/intualSearchArtist', async (req, res) => {
 		const artists = await tracksService.intualSearchArtist(artist)
 		res.send(artists)
 	} catch (e) {
-		console.error('Ошибка:', e)
-		return res.status(500).send(e.message)
+		next(e)
 	}
 })
 
-tracksController.post('/intualSearchTrackTitle', async (req, res) => {
+tracksController.post('/intualSearchTrackTitle', async (req, res, next) => {
 	try {
 		const { trackTitle: name } = req.body
 		const tracks = await tracksService.intualSearchName(name)
 		res.send(tracks)
 	} catch (e) {
-		console.error('Ошибка:', e)
-		return res.status(500).send(e.message)
+		next(e)
 	}
 })
 
@@ -96,9 +91,8 @@ tracksController.post(
 			await t.commit()
 			res.status(200)
 		} catch (e) {
-			console.error('Ошибка:', e)
 			await t.rollback()
-			return res.status(500).send(e.message)
+			next(e)
 		}
 	}
 )
@@ -109,8 +103,7 @@ tracksController.post('/', async (req, res) => {
 		const tracks = await tracksService.getTrack(offset, userId)
 		res.send(tracks)
 	} catch (e) {
-		console.error('Ошибка:', e)
-		return res.status(500).send(e.message)
+		next(e)
 	}
 })
 

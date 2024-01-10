@@ -10,8 +10,7 @@ favoriteController.post('/', async (req, res) => {
 		await favoriteService.add(trackId, userId, type)
 		res.sendStatus(200)
 	} catch (e) {
-		console.error(e)
-		return res.status(500).send(e.message)
+		next(e)
 	}
 })
 
@@ -22,8 +21,7 @@ favoriteController.post('/all', async (req, res) => {
 		const result = await trackMapper.toClient(favorites, type, userId)
 		res.json(result)
 	} catch (e) {
-		console.error(e)
-		return res.status(500).send(e.message)
+		next(e)
 	}
 })
 
@@ -33,8 +31,7 @@ favoriteController.delete('/', async (req, res) => {
 		await favoriteService.remove(trackId, userId, type)
 		res.sendStatus(200)
 	} catch (e) {
-		console.error(e)
-		return res.status(500).send(e.message)
+		next(e)
 	}
 })
 

@@ -8,8 +8,7 @@ promoController.get('/', async (req, res) => {
 		const topImages = await promoService.getPromo()
 		res.send(topImages)
 	} catch (e) {
-		console.error(e)
-		return res.status(500).send(e.message)
+		next(e)
 	}
 })
 
