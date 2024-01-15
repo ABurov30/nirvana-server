@@ -2,21 +2,21 @@
 	"development": {
 		"username": "andreyburov",
 		"password": null,
-		"database": "vibeTalk",
+		"database": "nirvana",
 		"host": "127.0.0.1",
 		"dialect": "postgres"
 	},
 	"test": {
 		"username": "andreyburov",
 		"password": null,
-		"database": "vibeTalk",
+		"database": "nirvana",
 		"host": "127.0.0.1",
 		"dialect": "postgres"
 	},
 	"production": {
 		"username": "andreyburov",
 		"password": null,
-		"database": "vibeTalk",
+		"database": "nirvana",
 		"host": "127.0.0.1",
 		"dialect": "postgres"
 	}

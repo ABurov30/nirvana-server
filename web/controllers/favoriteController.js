@@ -4,7 +4,7 @@ const trackMapper = require('../mapper/trackMapper')
 
 const favoriteController = express.Router()
 
-favoriteController.post('/', async (req, res) => {
+favoriteController.post('/', async (req, res, next) => {
 	try {
 		const { id: trackId, userId, type } = req.body
 		await favoriteService.add(trackId, userId, type)
@@ -14,7 +14,7 @@ favoriteController.post('/', async (req, res) => {
 	}
 })
 
-favoriteController.post('/all', async (req, res) => {
+favoriteController.post('/all', async (req, res, next) => {
 	try {
 		const { offset, userId, type } = req.body
 		const favorites = await favoriteService.findAll(offset, userId, type)
@@ -25,7 +25,7 @@ favoriteController.post('/all', async (req, res) => {
 	}
 })
 
-favoriteController.delete('/', async (req, res) => {
+favoriteController.delete('/', async (req, res, next) => {
 	try {
 		const { id: trackId, userId, type } = req.body
 		await favoriteService.remove(trackId, userId, type)

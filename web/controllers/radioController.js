@@ -4,7 +4,7 @@ const radioService = require('../services/radioService')
 
 const radioController = express.Router()
 
-radioController.get('/uniqNames', async (req, res) => {
+radioController.get('/uniqNames', async (req, res, next) => {
 	try {
 		const uniqNames = await radioService.uniqNames()
 		res.send(uniqNames)
@@ -13,7 +13,7 @@ radioController.get('/uniqNames', async (req, res) => {
 	}
 })
 
-radioController.get('/uniqGenre', async (req, res) => {
+radioController.get('/uniqGenre', async (req, res, next) => {
 	try {
 		const uniqueTags = await radioService.uniqTags()
 		res.send(uniqueTags)
@@ -22,7 +22,7 @@ radioController.get('/uniqGenre', async (req, res) => {
 	}
 })
 
-radioController.get('/uniqCountry', async (req, res) => {
+radioController.get('/uniqCountry', async (req, res, next) => {
 	try {
 		const uniqCountry = await radioService.uniqCountry()
 		res.send(uniqCountry)
@@ -31,7 +31,7 @@ radioController.get('/uniqCountry', async (req, res) => {
 	}
 })
 
-radioController.post('/search', async (req, res) => {
+radioController.post('/search', async (req, res, next) => {
 	try {
 		const { name, country, tags, userId } = req.body
 		if (name) {
@@ -64,7 +64,7 @@ radioController.post('/search', async (req, res) => {
 	}
 })
 
-radioController.post('/intualSearchName', async (req, res) => {
+radioController.post('/intualSearchName', async (req, res, next) => {
 	try {
 		const { name } = req.body
 		const stationsTitles = await radioService.intualSearchName(name)
@@ -74,7 +74,7 @@ radioController.post('/intualSearchName', async (req, res) => {
 	}
 })
 
-radioController.post('/intualSearchCountry', async (req, res) => {
+radioController.post('/intualSearchCountry', async (req, res, next) => {
 	try {
 		const { country } = req.body
 		const countryies = await radioService.intualSearchCountry(country)
@@ -84,7 +84,7 @@ radioController.post('/intualSearchCountry', async (req, res) => {
 	}
 })
 
-radioController.post('/intualSearchGenres', async (req, res) => {
+radioController.post('/intualSearchGenres', async (req, res, next) => {
 	try {
 		const { tags } = req.body
 		const genres = await radioService.intualSearchTags(tags)
@@ -94,7 +94,7 @@ radioController.post('/intualSearchGenres', async (req, res) => {
 	}
 })
 
-radioController.post('/', async (req, res) => {
+radioController.post('/', async (req, res, next) => {
 	try {
 		const { offset, userId } = req.body
 		const topRadios = await radioService.topRadios(offset, userId)

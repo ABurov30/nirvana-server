@@ -3,7 +3,7 @@ const authService = require('../services/authService')
 
 const authController = express.Router()
 
-authController.post('/signup', async (req, res) => {
+authController.post('/signup', async (req, res, next) => {
 	try {
 		const { nickname, email, password } = req.body
 		await authService.signup(nickname, email, password)
@@ -13,7 +13,7 @@ authController.post('/signup', async (req, res) => {
 	}
 })
 
-authController.delete('/', async (req, res) => {
+authController.delete('/', async (req, res, next) => {
 	try {
 		const { userId } = req.body
 		await authService.deleteUser(userId)
@@ -25,7 +25,7 @@ authController.delete('/', async (req, res) => {
 	}
 })
 
-authController.put('/userInfo', async (req, res) => {
+authController.put('/userInfo', async (req, res, next) => {
 	try {
 		const { nickname, email, userId } = req.body
 		const userWithoutPass = await authService.editUserInfo(
@@ -40,7 +40,7 @@ authController.put('/userInfo', async (req, res) => {
 	}
 })
 
-authController.get('/confirm/:confirmationCode', async (req, res) => {
+authController.get('/confirm/:confirmationCode', async (req, res, next) => {
 	try {
 		const { confirmationCode } = req.params
 		const foundUser = await authService.confirm(confirmationCode)
@@ -51,7 +51,7 @@ authController.get('/confirm/:confirmationCode', async (req, res) => {
 	}
 })
 
-authController.post('/login', async (req, res) => {
+authController.post('/login', async (req, res, next) => {
 	try {
 		const { email, password } = req.body
 		const userWithoutPass = await authService.login(email, password)
@@ -62,7 +62,7 @@ authController.post('/login', async (req, res) => {
 	}
 })
 
-authController.get('/logout', (req, res) => {
+authController.get('/logout', (req, res, next) => {
 	try {
 		req.session.destroy()
 		res.clearCookie('user_id')
@@ -72,7 +72,7 @@ authController.get('/logout', (req, res) => {
 	}
 })
 
-authController.get('/check', async (req, res) => {
+authController.get('/check', async (req, res, next) => {
 	try {
 		if (req.session?.user?.id) {
 			return res.json(req.session.user)
@@ -83,7 +83,7 @@ authController.get('/check', async (req, res) => {
 	}
 })
 
-authController.post('/findEmail', async (req, res) => {
+authController.post('/findEmail', async (req, res, next) => {
 	try {
 		const { email } = req.body
 		await authService.findEmail(email)
@@ -95,7 +95,7 @@ authController.post('/findEmail', async (req, res) => {
 	}
 })
 
-authController.get('/reset/:confirmationCode', async (req, res) => {
+authController.get('/reset/:confirmationCode', async (req, res, next) => {
 	try {
 		const { confirmationCode } = req.params
 
@@ -110,7 +110,7 @@ authController.get('/reset/:confirmationCode', async (req, res) => {
 	}
 })
 
-authController.post('/newPassword', async (req, res) => {
+authController.post('/newPassword', async (req, res, next) => {
 	try {
 		const { password, userId } = req.body
 		const user = await authService.newPassword(password, userId)

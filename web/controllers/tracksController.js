@@ -9,7 +9,7 @@ const upload = multer({ storage: storage })
 
 const tracksController = express.Router()
 
-tracksController.get('/uniqTracks', async (req, res) => {
+tracksController.get('/uniqTracks', async (req, res, next) => {
 	try {
 		const uniqTracks = await tracksService.uniqTracks()
 		res.send(uniqTracks)
@@ -18,7 +18,7 @@ tracksController.get('/uniqTracks', async (req, res) => {
 	}
 })
 
-tracksController.get('/uniqArtists', async (req, res) => {
+tracksController.get('/uniqArtists', async (req, res, next) => {
 	try {
 		const uniqArtists = await tracksService.uniqArtists()
 		res.send(uniqArtists)
@@ -27,7 +27,7 @@ tracksController.get('/uniqArtists', async (req, res) => {
 	}
 })
 
-tracksController.post('/search', async (req, res) => {
+tracksController.post('/search', async (req, res, next) => {
 	try {
 		const { trackTitle: name, artist, userId } = req.body
 		if (name && !artist) {
@@ -49,7 +49,7 @@ tracksController.post('/search', async (req, res) => {
 	}
 })
 
-tracksController.post('/intualSearchArtist', async (req, res) => {
+tracksController.post('/intualSearchArtist', async (req, res, next) => {
 	try {
 		const { artist } = req.body
 		const artists = await tracksService.intualSearchArtist(artist)
@@ -75,7 +75,7 @@ tracksController.post(
 		{ name: 'cover', maxCount: 1 },
 		{ name: 'track', maxCount: 1 }
 	]),
-	async (req, res) => {
+	async (req, res, next) => {
 		const t = await sequelize.transaction()
 		try {
 			const { trackName, artist } = req.body
@@ -97,7 +97,7 @@ tracksController.post(
 	}
 )
 
-tracksController.post('/', async (req, res) => {
+tracksController.post('/', async (req, res, next) => {
 	try {
 		const { offset, userId } = req.body
 		const tracks = await tracksService.getTrack(offset, userId)

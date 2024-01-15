@@ -3,7 +3,7 @@ const promoService = require('../services/promoService')
 
 const promoController = express.Router()
 
-promoController.get('/', async (req, res) => {
+promoController.get('/', async (req, res, next) => {
 	try {
 		const topImages = await promoService.getPromo()
 		res.send(topImages)
