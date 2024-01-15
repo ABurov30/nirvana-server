@@ -165,7 +165,6 @@ async function searchByArtistAndName(name, artist, userId) {
 
 async function addTrack({ artist, trackName, img, mp3 }) {
 	try {
-		console.log(img, mp3, '--------------dsafdsafds------------------')
 		await Track.create({
 			id: uuidv4(),
 			name: trackName,
