@@ -8,6 +8,7 @@ favoriteController.post('/', async (req, res, next) => {
 	try {
 		const { id: trackId, userId, type } = req.body
 		await favoriteService.add(trackId, userId, type)
+		console.log('added')
 		res.sendStatus(200)
 	} catch (e) {
 		next(e)
