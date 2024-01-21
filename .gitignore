@@ -6,7 +6,7 @@ jspm_packages/
 dist/
 build/
 
-.sessions/
+sessions/
 
 # Environment files
 .env
