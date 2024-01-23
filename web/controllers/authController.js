@@ -9,7 +9,7 @@ authController.post('/signup', async (req, res, next) => {
 		await authService.signup(nickname, email, password)
 		return res.status(200).json('Email sent successfully')
 	} catch (e) {
-		next(e)
+		res.status(500).json('Error sign up: ' + e.message)
 	}
 })
 
@@ -58,7 +58,7 @@ authController.post('/login', async (req, res, next) => {
 		req.session.user = userWithoutPass
 		return res.json(userWithoutPass)
 	} catch (e) {
-		next(e)
+		res.status(500).json('Error login: ' + e.message)
 	}
 })
 
