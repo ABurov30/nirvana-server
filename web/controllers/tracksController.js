@@ -69,33 +69,33 @@ tracksController.post('/intualSearchTrackTitle', async (req, res, next) => {
 	}
 })
 
-tracksController.post(
-	'/uploadTrack',
-	upload.fields([
-		{ name: 'cover', maxCount: 1 },
-		{ name: 'track', maxCount: 1 }
-	]),
-	async (req, res, next) => {
-		const t = await sequelize.transaction()
-		try {
-			const { trackName, artist } = req.body
+// tracksController.post(
+// 	'/uploadTrack',
+// 	upload.fields([
+// 		{ name: 'cover', maxCount: 1 },
+// 		{ name: 'track', maxCount: 1 }
+// 	]),
+// 	async (req, res, next) => {
+// 		const t = await sequelize.transaction()
+// 		try {
+// 			const { trackName, artist } = req.body
 
-			const cover = req.files?.cover[0]?.buffer
-			const track = req.files?.track[0]?.buffer
+// 			const cover = req.files?.cover[0]?.buffer
+// 			const track = req.files?.track[0]?.buffer
 
-			const { img, mp3 } = await cloudService.upload({
-				track,
-				cover
-			})
-			await tracksService.addTrack({ artist, trackName, img, mp3 })
-			await t.commit()
-			res.status(200)
-		} catch (e) {
-			await t.rollback()
-			next(e)
-		}
-	}
-)
+// 			const { img, mp3 } = await cloudService.upload({
+// 				track,
+// 				cover
+// 			})
+// 			await tracksService.addTrack({ artist, trackName, img, mp3 })
+// 			await t.commit()
+// 			res.status(200)
+// 		} catch (e) {
+// 			await t.rollback()
+// 			next(e)
+// 		}
+// 	}
+// )
 
 tracksController.post('/', async (req, res, next) => {
 	try {
