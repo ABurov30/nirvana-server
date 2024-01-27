@@ -8,7 +8,8 @@ module.exports = (sequelize, DataTypes) => {
 			name: DataTypes.TEXT,
 			artist: DataTypes.TEXT,
 			url: DataTypes.TEXT,
-			favicon: DataTypes.TEXT
+			favicon: DataTypes.TEXT,
+			moderated: DataTypes.BOOLEAN
 		},
 		{
 			sequelize,

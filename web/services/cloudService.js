@@ -24,7 +24,6 @@ async function upload({ track, cover }) {
 			},
 			'/img/'
 		)
-		console.log(img, mp3, '00000000')
 		if (mp3 && track) {
 			return { img: img.Location, mp3: mp3.Location }
 		} else {

@@ -25,6 +25,10 @@ module.exports = {
 				type: Sequelize.TEXT,
 				allowNull: false
 			},
+			moderated: {
+				type: Sequelize.BOOLEAN,
+				defaultValue: false
+			},
 			createdAt: {
 				allowNull: false,
 				type: Sequelize.DATE,

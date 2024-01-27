@@ -9,6 +9,7 @@ build/
 sessions/
 
 # Environment files
+./db/.env
 .env
 .env.*
 

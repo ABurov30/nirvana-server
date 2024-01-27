@@ -57,8 +57,14 @@ async function login(email, password) {
 		}
 
 		if (await bcrypt.compare(password, foundUser.hashpass)) {
-			const { id, nickname, email, confirmed } = foundUser
-			const userWithoutPassword = { id, nickname, email, confirmed }
+			const { id, nickname, email, confirmed, isAdmin } = foundUser
+			const userWithoutPassword = {
+				id,
+				nickname,
+				email,
+				confirmed,
+				isAdmin
+			}
 			return userWithoutPassword
 		}
 
@@ -157,8 +163,8 @@ async function newPassword(password, userId) {
 		const hashpass = await bcrypt.hash(password, 10)
 		await User.update({ hashpass }, { where: { id: userId } })
 		const foundUser = await User.findOne({ where: { id: userId } })
-		const { id, nickname, email, confirmed } = foundUser.dataValues
-		const userWithoutPassword = { id, nickname, email, confirmed }
+		const { id, nickname, email, confirmed, isAdmin } = foundUser.dataValues
+		const userWithoutPassword = { id, nickname, email, confirmed, isAdmin }
 		return userWithoutPassword
 	} catch (e) {
 		console.error(e)

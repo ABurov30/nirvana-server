@@ -1,5 +1,6 @@
 const { v4: uuidv4 } = require('uuid')
 const bcrypt = require('bcrypt')
+require('dotenv').config()
 
 module.exports = {
 	async up(queryInterface, Sequelize) {
@@ -8,10 +9,14 @@ module.exports = {
 			[
 				{
 					id: uuidv4(),
-					email: 'aaa@a',
-					nickname: 'aaa',
-					hashpass: `${await bcrypt.hash('123', 10)}`,
-					confirmed: true
+					email: process.env.ADMIN_EMAIL,
+					nickname: 'admin',
+					hashpass: `${await bcrypt.hash(
+						process.env.ADMIN_PASSWORD,
+						10
+					)}`,
+					confirmed: true,
+					isAdmin: true
 				}
 			],
 			{}

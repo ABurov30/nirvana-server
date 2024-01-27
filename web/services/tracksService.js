@@ -6,6 +6,9 @@ const { v4: uuidv4 } = require('uuid')
 async function getTrack(offset, userId) {
 	try {
 		let results = await Track.findAll({
+			where: {
+				moderated: true
+			},
 			limit: 5,
 			offset: offset
 		})
@@ -21,6 +24,9 @@ async function getTrack(offset, userId) {
 async function uniqTracks() {
 	try {
 		const results = await Track.findAll({
+			where: {
+				moderated: true
+			},
 			attributes: ['name'],
 			limit: 10
 		})
@@ -36,6 +42,9 @@ async function uniqTracks() {
 async function uniqArtists() {
 	try {
 		let results = await Track.findAll({
+			where: {
+				moderated: true
+			},
 			attributes: ['artist'],
 			limit: 10
 		})
@@ -51,12 +60,15 @@ async function uniqArtists() {
 async function searchByName(name, userId) {
 	try {
 		const tracks = await Track.findOne({
-			where: Sequelize.where(
-				Sequelize.fn('LOWER', Sequelize.col('name')),
-				{
-					[Op.iLike]: `%${name.trim().toLowerCase()}%`
-				}
-			)
+			where: {
+				name: Sequelize.where(
+					Sequelize.fn('LOWER', Sequelize.col('name')),
+					{
+						[Op.iLike]: `%${name.trim().toLowerCase()}%`
+					}
+				),
+				moderated: true
+			}
 		})
 		const res = await trackMapper.toClient(
 			[tracks?.dataValues],
@@ -73,12 +85,15 @@ async function searchByName(name, userId) {
 async function intualSearchName(name) {
 	try {
 		const tracks = await Track.findAll({
-			where: Sequelize.where(
-				Sequelize.fn('LOWER', Sequelize.col('name')),
-				{
-					[Op.like]: `%${name.trim().toLowerCase()}%`
-				}
-			),
+			where: {
+				name: Sequelize.where(
+					Sequelize.fn('LOWER', Sequelize.col('name')),
+					{
+						[Op.like]: `%${name.trim().toLowerCase()}%`
+					}
+				),
+				moderated: true
+			},
 			attributes: ['name'],
 			limit: 3
 		})
@@ -93,12 +108,15 @@ async function intualSearchName(name) {
 async function searchByArtist(artist, userId) {
 	try {
 		const track = await Track.findOne({
-			where: Sequelize.where(
-				Sequelize.fn('LOWER', Sequelize.col('artist')),
-				{
-					[Op.iLike]: `%${artist.trim().toLowerCase()}%`
-				}
-			)
+			where: {
+				artist: Sequelize.where(
+					Sequelize.fn('LOWER', Sequelize.col('artist')),
+					{
+						[Op.iLike]: `%${artist.trim().toLowerCase()}%`
+					}
+				),
+				moderated: true
+			}
 		})
 		const res = await trackMapper.toClient(
 			[track?.dataValues],
@@ -115,12 +133,15 @@ async function searchByArtist(artist, userId) {
 async function intualSearchArtist(artist) {
 	try {
 		const artists = await Track.findAll({
-			where: Sequelize.where(
-				Sequelize.fn('LOWER', Sequelize.col('artist')),
-				{
-					[Op.like]: `%${artist.trim().toLowerCase()}%`
-				}
-			),
+			where: {
+				artist: Sequelize.where(
+					Sequelize.fn('LOWER', Sequelize.col('artist')),
+					{
+						[Op.like]: `%${artist.trim().toLowerCase()}%`
+					}
+				),
+				moderated: true
+			},
 			attributes: ['artist'],
 			limit: 3
 		})
@@ -148,7 +169,8 @@ async function searchByArtistAndName(name, artist, userId) {
 					{
 						[Op.iLike]: `%${artist.trim().toLowerCase()}%`
 					}
-				)
+				),
+				moderated: true
 			}
 		})
 		const res = await trackMapper.toClient(
