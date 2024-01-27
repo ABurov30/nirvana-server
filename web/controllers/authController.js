@@ -1,5 +1,6 @@
 const express = require('express')
 const authService = require('../services/authService')
+require('dotenv').config()
 
 const authController = express.Router()
 
@@ -45,7 +46,7 @@ authController.get('/confirm/:confirmationCode', async (req, res, next) => {
 		const { confirmationCode } = req.params
 		const foundUser = await authService.confirm(confirmationCode)
 		req.session.user = foundUser
-		res.redirect('http://localhost:5173')
+		res.redirect(process.env.FRONT_BASE_URL)
 	} catch (e) {
 		next(e)
 	}
