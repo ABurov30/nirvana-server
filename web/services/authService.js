@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt')
 const { User } = require('../../db/models')
 const crypto = require('crypto')
+require('dotenv').config()
 const changePassword = require('../mails/changePassword')
 const mailerService = require('../services/mailerService')
 const confirmEmail = require('../mails/confirmEmail')
@@ -36,7 +37,7 @@ async function signup(nickname, email, password) {
 
 		await mailerService.sendEmail(
 			userWithoutPass,
-			confirmEmail(confirmationCode)
+			confirmEmail(confirmationCode, process.env.BASE_URL)
 		)
 	} catch (e) {
 		console.error(e)
