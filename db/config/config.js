@@ -17,11 +17,11 @@ module.exports = {
 		pool: {
 			min: 0,
 			max: 7,
-			acquireTimeoutMillis: 300000,
-			createTimeoutMillis: 300000,
-			destroyTimeoutMillis: 50000,
-			idleTimeoutMillis: 300000,
-			reapIntervalMillis: 10000,
+			acquireTimeoutMillis: 1000000,
+			createTimeoutMillis: 1000000,
+			destroyTimeoutMillis: 5000000,
+			idleTimeoutMillis: 3000000,
+			reapIntervalMillis: 1000000,
 			createRetryIntervalMillis: 2000,
 			propagateCreateError: false
 		},

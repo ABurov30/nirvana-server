@@ -8,7 +8,7 @@
 		"start": "nodemon --ignore ./sessions/ server.js",
 		"prod": "node server.js",
 		"prep-db": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
-		"connect": "npx sequelize-cli db:migrate --url ${DB_URI} && npx sequelize-cli db:seed:all --url ${DB_URI}"
+		"connect": "npx sequelize-cli db:drop --url ${DB_URI} && npx sequelize-cli db:create --url ${DB_URI} && npx sequelize-cli db:migrate --url ${DB_URI} && npx sequelize-cli db:seed:all --url ${DB_URI}"
 	},
 	"author": "",
 	"license": "ISC",
