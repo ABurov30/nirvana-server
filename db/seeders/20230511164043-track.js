@@ -70,14 +70,6 @@ module.exports = {
 				},
 				{
 					id: uuidv4(),
-					name: 'Desolate World',
-					artist: 'DSTechnician',
-					url: 'https://storage.yandexcloud.net/nirvana-tracks/mp3/desolate-world-121196.mp3',
-					favicon: '',
-					moderated: true
-				},
-				{
-					id: uuidv4(),
 					name: 'Red Rabbit - Audiopanther',
 					artist: 'igorovsyannykov',
 					url: 'https://storage.yandexcloud.net/nirvana-tracks/mp3/red-rabbit-audiopanther-115592.mp3',
