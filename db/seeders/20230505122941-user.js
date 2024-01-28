@@ -11,7 +11,7 @@ module.exports = {
 					id: uuidv4(),
 					email: 'admin@nirvana',
 					nickname: 'admin',
-					hashpass: `${await bcrypt.hash(123, 10)}`,
+					hashpass: `${await bcrypt.hash('123', 10)}`,
 					confirmed: true,
 					isAdmin: true
 				}
