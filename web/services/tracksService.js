@@ -14,7 +14,6 @@ async function getTrack(offset, userId) {
 		})
 		results = results.map(result => result.dataValues)
 		const res = await trackMapper.toClient(results, 'track', userId)
-		console.log(res)
 		return res
 	} catch (e) {
 		console.error(e)
