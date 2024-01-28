@@ -3,7 +3,7 @@ const { v4: uuidv4 } = require('uuid')
 
 module.exports = {
 	async up(queryInterface, Sequelize) {
-		const radios = await RadioBrowser.getStations()
+		const radios = await RadioBrowser.getStations({ limit: 100 })
 		const radiosWithUsefullFields = radios.map(el => {
 			return {
 				id: uuidv4(),
