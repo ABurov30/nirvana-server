@@ -1,4 +1,3 @@
-const { tr } = require('@faker-js/faker')
 const { Radio, Sequelize } = require('../../db/models')
 const { Op } = Sequelize
 const trackMapper = require('../mapper/trackMapper')

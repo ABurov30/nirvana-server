@@ -17,14 +17,14 @@ module.exports = {
 		pool: {
 			min: 0,
 			max: 7,
-			acquireTimeoutMillis: 1000000,
-			createTimeoutMillis: 1000000,
-			destroyTimeoutMillis: 5000000,
-			idleTimeoutMillis: 3000000,
-			reapIntervalMillis: 1000000,
+			acquireTimeoutMillis: 100000000,
+			createTimeoutMillis: 1000000000,
+			destroyTimeoutMillis: 500000000,
+			idleTimeoutMillis: 300000000,
+			reapIntervalMillis: 100000000,
 			createRetryIntervalMillis: 2000,
 			propagateCreateError: false
 		},
-		acquireConnectionTimeout: 60000
+		acquireConnectionTimeout: 600000000
 	}
 }
