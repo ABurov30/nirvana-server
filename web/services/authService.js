@@ -47,6 +47,7 @@ async function signup(nickname, email, password) {
 async function login(email, password) {
 	try {
 		const foundUser = await User.findOne({ where: { email } })
+		console.log(foundUser, '99999')
 
 		if (!foundUser) {
 			throw new Error('No such email')
