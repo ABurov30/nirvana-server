@@ -32,19 +32,17 @@ const sessionConfig = {
 		httpOnly: true,
 		sameSite: 'none',
 		secure: true,
-		domain:
-			process.env.NODE_ENV === 'development'
-				? '.localhost'
-				: '.nirvana-music.ru'
+		domain: '.nirvana-music.ru'
 	}
 }
 
 app.use(
 	cors({
 		credentials: true,
-		origin: true
+		origin: 'https://www.nirvana-music.ru'
 	})
 )
+
 app.use(helmet())
 app.use(session(sessionConfig))
 app.use(morgan('dev'))
