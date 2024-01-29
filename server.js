@@ -31,7 +31,11 @@ const sessionConfig = {
 		maxAge: 1000 * 60 * 60,
 		httpOnly: true,
 		sameSite: 'none',
-		secure: true
+		secure: true,
+		domain:
+			process.env.NODE_ENV === 'development'
+				? '.localhost'
+				: '.nirvana-music.ru'
 	}
 }
 
