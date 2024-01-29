@@ -28,7 +28,7 @@ const sessionConfig = {
 	store: new FileStore(),
 	saveUninitialized: false,
 	cookie: {
-		maxAge: 1000 * 60 * 60,
+		maxAge: 100,
 		httpOnly: true,
 		sameSite: 'none',
 		secure: true,
