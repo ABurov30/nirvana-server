@@ -59,7 +59,9 @@ authController.post('/login', async (req, res, next) => {
 		req.session.user = userWithoutPass
 		console.log(req.session.user, 'user in session')
 		console.log(userWithoutPass, 'user without pass')
-		return res.json(userWithoutPass)
+		return res
+			.setHeader('Expires', new Date(Date.now() + 1).toUTCString())
+			.json(userWithoutPass)
 	} catch (e) {
 		res.status(500).json('Error login: ' + e.message)
 	}
