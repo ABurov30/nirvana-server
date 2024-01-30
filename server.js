@@ -28,22 +28,12 @@ const sessionConfig = {
 	store: new FileStore(),
 	saveUninitialized: false,
 	cookie: {
-		maxAge: 100,
-		httpOnly: true,
-		sameSite: 'none',
-		secure: true,
-		domain: '.nirvana-music.ru'
+		maxAge: 1000 * 60 * 60,
+		httpOnly: true
 	}
 }
 
-app.use(
-	cors({
-		credentials: true,
-		origin: 'https://www.nirvana-music.ru'
-	})
-)
-
-app.set('trust proxy', true)
+app.use(cors({ credentials: true, origin: true }))
 
 app.use(helmet())
 app.use(session(sessionConfig))
