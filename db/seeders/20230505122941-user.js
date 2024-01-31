@@ -9,7 +9,7 @@ module.exports = {
 			[
 				{
 					id: uuidv4(),
-					email: process.env.ADMIN_EMAIL,
+					email: 'admin@nirvana',
 					nickname: 'admin',
 					hashpass: `${await bcrypt.hash(
 						process.env.ADMIN_PASSWORD,
