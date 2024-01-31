@@ -13,7 +13,7 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"axios": "^1.4.0",
+		"axios": "^1.6.7",
 		"bcrypt": "^5.1.0",
 		"busboy": "^1.6.0",
 		"connect-busboy": "^1.0.0",
@@ -25,6 +25,7 @@
 		"express-session": "^1.17.3",
 		"helmet": "^7.1.0",
 		"method-override": "^3.0.0",
+		"morgan": "^1.10.0",
 		"multer": "^1.4.5-lts.1",
 		"nodemailer": "^6.9.7",
 		"pg": "^8.10.0",
@@ -34,8 +35,7 @@
 		"react-dom": "^18.2.0",
 		"react-router-dom": "^6.11.1",
 		"sequelize": "^6.31.1",
-		"session-file-store": "^1.5.0",
-		"morgan": "^1.10.0"
+		"session-file-store": "^1.5.0"
 	},
 	"devDependencies": {
 		"@babel/node": "^7.20.7",

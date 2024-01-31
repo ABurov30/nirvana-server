@@ -78,19 +78,14 @@ async function remove(id, userId, type) {
 	}
 }
 
-async function check({ trackId, radioId, userId }) {
+async function checkIsLiked({ type, userId }) {
 	try {
-		if (trackId && !radioId) {
-			const res = await Favorite.findOne({
-				where: { trackId: String(trackId), userId: String(userId) }
-			})
-			return res ? true : false
-		} else if (radioId && !trackId) {
-			const res = await Favorite.findOne({
-				where: { radioId: String(radioId), userId: String(userId) }
-			})
-			return res ? true : false
-		}
+		const res = await Favorite.findAll({
+			where: { type, userId },
+			attributes: [type === 'track' ? 'trackId' : 'radioId']
+		})
+		const result = res.map(favorite => favorite.dataValues.trackId)
+		return new Set(result)
 	} catch (e) {
 		console.error(e)
 		throw e
@@ -100,6 +95,6 @@ async function check({ trackId, radioId, userId }) {
 module.exports = {
 	add,
 	remove,
-	check,
+	checkIsLiked,
 	findAll
 }

@@ -14,7 +14,6 @@ const helmet = require('helmet')
 const { errorHandler } = require('./web/middleware/errorHandler')
 require('dotenv').config()
 const { config } = require('dotenv')
-console.log(config())
 
 const app = express()
 const PORT = process.env.PORT || 3001

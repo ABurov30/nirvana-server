@@ -2,25 +2,22 @@ const favoriteService = require('../services/favoriteService')
 
 async function toClient(tracks, type, userId) {
 	try {
-		if (!tracks) return []
-		res = await Promise.all(
-			tracks?.map(async track => {
-				const isLiked = await favoriteService.check({
-					trackId: type === 'track' ? track?.id : null,
-					radioId: type === 'radio' ? track?.id : null,
-					userId
-				})
-				return {
-					id: track?.id,
-					title: track?.name,
-					subTitle: type === 'track' ? track?.artist : track?.country,
-					url: track?.url,
-					img: track?.favicon,
-					type: type,
-					isLiked: isLiked
-				}
-			})
-		)
+		if (!tracks.length) return []
+		const likedTracksIds = await favoriteService.checkIsLiked({
+			type,
+			userId
+		})
+		const res = tracks.map(track => {
+			return {
+				id: track?.id,
+				title: track?.name,
+				subTitle: type === 'track' ? track?.artist : track?.country,
+				url: track?.url,
+				img: track?.favicon,
+				type: type,
+				isLiked: likedTracksIds.has(track?.id)
+			}
+		})
 		return res
 	} catch (e) {
 		console.error(e)

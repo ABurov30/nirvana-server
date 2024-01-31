@@ -57,8 +57,6 @@ authController.post('/login', async (req, res, next) => {
 		const { email, password } = req.body
 		const userWithoutPass = await authService.login(email, password)
 		req.session.user = userWithoutPass
-		console.log(req.session.user, 'user in session')
-		console.log(userWithoutPass, 'user without pass')
 		return res.json(userWithoutPass)
 	} catch (e) {
 		res.status(500).json('Error login: ' + e.message)
@@ -77,7 +75,6 @@ authController.get('/logout', (req, res, next) => {
 
 authController.get('/check', async (req, res, next) => {
 	try {
-		console.log(req.session)
 		if (req.session?.user?.id) {
 			return res.json(req.session.user)
 		}
