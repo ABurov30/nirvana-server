@@ -39,7 +39,6 @@ app.use(helmet())
 app.use(session(sessionConfig))
 app.use(morgan('dev'))
 app.use(express.json())
-app.use(errorHandler)
 
 app.use('/api/checkHealth', checkHealthController)
 app.use('/api/radio', radioController)
@@ -47,5 +46,7 @@ app.use('/api/auth', authController)
 app.use('/api/promo', promoController)
 app.use('/api/track', tracksController)
 app.use('/api/favorite', favoriteController)
+
+app.use(errorHandler)
 
 app.listen(PORT, () => console.log(`Server has started on PORT ${PORT}`))

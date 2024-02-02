@@ -8,9 +8,9 @@ authController.post('/signup', async (req, res, next) => {
 	try {
 		const { nickname, email, password } = req.body
 		await authService.signup(nickname, email, password)
-		return res.status(200).json('Email sent successfully')
+		return res.status(200)
 	} catch (e) {
-		res.status(500).json('Error sign up: ' + e.message)
+		next(e)
 	}
 })
 
@@ -88,9 +88,7 @@ authController.post('/findEmail', async (req, res, next) => {
 	try {
 		const { email } = req.body
 		await authService.findEmail(email)
-		return res
-			.status(200)
-			.json('E-mail sent successfully. Check it to reset password')
+		return res.sendStatus(200)
 	} catch (e) {
 		next(e)
 	}
