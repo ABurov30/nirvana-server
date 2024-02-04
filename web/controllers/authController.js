@@ -8,7 +8,7 @@ authController.post('/signup', async (req, res, next) => {
 	try {
 		const { nickname, email, password } = req.body
 		await authService.signup(nickname, email, password)
-		return res.status(200)
+		res.sendStatus(200)
 	} catch (e) {
 		next(e)
 	}
@@ -57,7 +57,7 @@ authController.post('/login', async (req, res, next) => {
 		const { email, password } = req.body
 		const userWithoutPass = await authService.login(email, password)
 		req.session.user = userWithoutPass
-		return res.json(userWithoutPass)
+		res.json(userWithoutPass)
 	} catch (e) {
 		res.status(500).json('Error login: ' + e.message)
 	}
@@ -76,9 +76,10 @@ authController.get('/logout', (req, res, next) => {
 authController.get('/check', async (req, res, next) => {
 	try {
 		if (req.session?.user?.id) {
-			return res.json(req.session.user)
+			res.json(req.session.user)
+		} else {
+			res.sendStatus(401)
 		}
-		return res.status(401)
 	} catch (e) {
 		next(e)
 	}
@@ -88,7 +89,7 @@ authController.post('/findEmail', async (req, res, next) => {
 	try {
 		const { email } = req.body
 		await authService.findEmail(email)
-		return res.sendStatus(200)
+		res.sendStatus(200)
 	} catch (e) {
 		next(e)
 	}
@@ -114,7 +115,7 @@ authController.post('/newPassword', async (req, res, next) => {
 		const { password, userId } = req.body
 		const user = await authService.newPassword(password, userId)
 		req.session.user = user
-		return res.json(user)
+		res.json(user)
 	} catch (e) {
 		next(e)
 	}
