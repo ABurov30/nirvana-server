@@ -78,7 +78,7 @@ authController.get('/check', async (req, res, next) => {
 		if (req.session?.user?.id) {
 			return res.json(req.session.user)
 		}
-		return res.status(401).send('Unauthorized')
+		return res.status(401)
 	} catch (e) {
 		next(e)
 	}
@@ -102,7 +102,7 @@ authController.get('/reset/:confirmationCode', async (req, res, next) => {
 		if (user) {
 			res.status(200).json({ userId: user.id })
 		} else {
-			res.status(401).json('Wrong code, please try again')
+			res.status(401)
 		}
 	} catch (e) {
 		next(e)
