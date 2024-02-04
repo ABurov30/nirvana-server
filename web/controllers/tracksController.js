@@ -4,12 +4,13 @@ const cloudService = require('../services/cloudService')
 const multer = require('multer')
 const storage = multer.memoryStorage()
 const { sequelize } = require('../../db/models')
+const authChecker = require('../middleware/authChecker')
 
 const upload = multer({ storage: storage })
 
 const tracksController = express.Router()
 
-tracksController.get('/uniqTracks', async (req, res, next) => {
+tracksController.get('/uniqTracks', authChecker, async (req, res, next) => {
 	try {
 		const uniqTracks = await tracksService.uniqTracks()
 		res.send(uniqTracks)
@@ -18,7 +19,7 @@ tracksController.get('/uniqTracks', async (req, res, next) => {
 	}
 })
 
-tracksController.get('/uniqArtists', async (req, res, next) => {
+tracksController.get('/uniqArtists', authChecker, async (req, res, next) => {
 	try {
 		const uniqArtists = await tracksService.uniqArtists()
 		res.send(uniqArtists)
@@ -27,7 +28,7 @@ tracksController.get('/uniqArtists', async (req, res, next) => {
 	}
 })
 
-tracksController.post('/search', async (req, res, next) => {
+tracksController.post('/search', authChecker, async (req, res, next) => {
 	try {
 		const { trackTitle: name, artist, userId } = req.body
 		if (name && !artist) {
@@ -49,28 +50,37 @@ tracksController.post('/search', async (req, res, next) => {
 	}
 })
 
-tracksController.post('/intualSearchArtist', async (req, res, next) => {
-	try {
-		const { artist } = req.body
-		const artists = await tracksService.intualSearchArtist(artist)
-		res.send(artists)
-	} catch (e) {
-		next(e)
+tracksController.post(
+	'/intualSearchArtist',
+	authChecker,
+	async (req, res, next) => {
+		try {
+			const { artist } = req.body
+			const artists = await tracksService.intualSearchArtist(artist)
+			res.send(artists)
+		} catch (e) {
+			next(e)
+		}
 	}
-})
+)
 
-tracksController.post('/intualSearchTrackTitle', async (req, res, next) => {
-	try {
-		const { trackTitle: name } = req.body
-		const tracks = await tracksService.intualSearchName(name)
-		res.send(tracks)
-	} catch (e) {
-		next(e)
+tracksController.post(
+	'/intualSearchTrackTitle',
+	authChecker,
+	async (req, res, next) => {
+		try {
+			const { trackTitle: name } = req.body
+			const tracks = await tracksService.intualSearchName(name)
+			res.send(tracks)
+		} catch (e) {
+			next(e)
+		}
 	}
-})
+)
 
 tracksController.post(
 	'/uploadTrack',
+	authChecker,
 	upload.fields([
 		{ name: 'cover', maxCount: 1 },
 		{ name: 'track', maxCount: 1 }
@@ -103,7 +113,7 @@ tracksController.post(
 	}
 )
 
-tracksController.post('/', async (req, res, next) => {
+tracksController.post('/', authChecker, async (req, res, next) => {
 	try {
 		const { offset, userId } = req.body
 		const tracks = await tracksService.getTrack(offset, userId)

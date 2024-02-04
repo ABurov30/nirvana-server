@@ -1,5 +1,6 @@
 const express = require('express')
 const authService = require('../services/authService')
+const authChecker = require('../middleware/authChecker')
 require('dotenv').config()
 
 const authController = express.Router()
@@ -14,7 +15,7 @@ authController.post('/signup', async (req, res, next) => {
 	}
 })
 
-authController.delete('/', async (req, res, next) => {
+authController.delete('/', authChecker, async (req, res, next) => {
 	try {
 		const { userId } = req.body
 		await authService.deleteUser(userId)
@@ -26,7 +27,7 @@ authController.delete('/', async (req, res, next) => {
 	}
 })
 
-authController.put('/userInfo', async (req, res, next) => {
+authController.put('/userInfo', authChecker, async (req, res, next) => {
 	try {
 		const { nickname, email, userId } = req.body
 		const userWithoutPass = await authService.editUserInfo(
@@ -63,7 +64,7 @@ authController.post('/login', async (req, res, next) => {
 	}
 })
 
-authController.get('/logout', (req, res, next) => {
+authController.get('/logout', authChecker, (req, res, next) => {
 	try {
 		req.session.destroy()
 		res.clearCookie('user_id')

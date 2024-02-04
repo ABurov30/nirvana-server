@@ -1,10 +1,11 @@
 const express = require('express')
 const favoriteService = require('../services/favoriteService')
 const trackMapper = require('../mapper/trackMapper')
+const authChecker = require('../middleware/authChecker')
 
 const favoriteController = express.Router()
 
-favoriteController.post('/', async (req, res, next) => {
+favoriteController.post('/', authChecker, async (req, res, next) => {
 	try {
 		const { id: trackId, userId, type } = req.body
 		await favoriteService.add(trackId, userId, type)
@@ -14,7 +15,7 @@ favoriteController.post('/', async (req, res, next) => {
 	}
 })
 
-favoriteController.post('/all', async (req, res, next) => {
+favoriteController.post('/all', authChecker, async (req, res, next) => {
 	try {
 		const { offset, userId, type } = req.body
 		const favorites = await favoriteService.findAll(offset, userId, type)
@@ -25,7 +26,7 @@ favoriteController.post('/all', async (req, res, next) => {
 	}
 })
 
-favoriteController.delete('/', async (req, res, next) => {
+favoriteController.delete('/', authChecker, async (req, res, next) => {
 	try {
 		const { id: trackId, userId, type } = req.body
 		await favoriteService.remove(trackId, userId, type)
