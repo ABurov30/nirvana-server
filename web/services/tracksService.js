@@ -48,8 +48,10 @@ async function uniqArtists() {
 			attributes: ['artist'],
 			limit: 10
 		})
+		results = results.map(result => result.dataValues.artist)
+		results = [...new Set(results)]
 		return results?.map((el, i) => {
-			return { label: el.dataValues.artist, key: i }
+			return { label: el, key: i }
 		})
 	} catch (e) {
 		console.error(e)
@@ -84,7 +86,7 @@ async function searchByName(name, userId) {
 
 async function intualSearchName(name) {
 	try {
-		const tracks = await Track.findAll({
+		let tracks = await Track.findAll({
 			where: {
 				name: Sequelize.where(
 					Sequelize.fn('LOWER', Sequelize.col('name')),
@@ -146,7 +148,8 @@ async function intualSearchArtist(artist) {
 			limit: 3
 		})
 
-		const res = artists.map(artist => artist.dataValues.artist)
+		let res = artists.map(artist => artist.dataValues.artist)
+		res = [...new Set(res)]
 		return res
 	} catch (e) {
 		console.error(e)
