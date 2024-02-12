@@ -70,8 +70,8 @@ radioController.post(
 	authChecker,
 	async (req, res, next) => {
 		try {
-			const { name } = req.body
-			const stationsTitles = await radioService.intualSearchName(name)
+			const { radio } = req.body
+			const stationsTitles = await radioService.intualSearchName(radio)
 			res.send(stationsTitles)
 		} catch (e) {
 			next(e)
