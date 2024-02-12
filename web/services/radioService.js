@@ -80,7 +80,7 @@ async function uniqCountry() {
 
 async function searchByName(name, userId) {
 	try {
-		const station = await Radio.findOne({
+		let station = await Radio.findOne({
 			where: Sequelize.where(
 				Sequelize.fn('LOWER', Sequelize.col('name')),
 				{
@@ -88,11 +88,8 @@ async function searchByName(name, userId) {
 				}
 			)
 		})
-		const res = await trackMapper.toClient(
-			[station.dataValues],
-			'radio',
-			userId
-		)
+		station = station?.dataValues
+		const res = await trackMapper.toClient([station], 'radio', userId)
 		return res
 	} catch (e) {
 		console.error(e)
