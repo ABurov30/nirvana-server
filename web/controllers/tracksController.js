@@ -105,7 +105,7 @@ tracksController.post(
 				moderated: false
 			})
 			await t.commit()
-			res.status(200)
+			res.sendStatus(200)
 		} catch (e) {
 			await t.rollback()
 			next(e)
