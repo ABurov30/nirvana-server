@@ -7,7 +7,6 @@ module.exports = {
 		const radios = await RadioBrowser.getStations({ limit: 100 })
 		const radiosWithUsefullFields = await Promise.all(
 			radios.map(async el => {
-				console.log(checkImage(el.favicon))
 				return {
 					id: uuidv4(),
 					name: el.name,
