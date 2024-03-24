@@ -11,8 +11,7 @@ module.exports = (sequelize, DataTypes) => {
 			tags: DataTypes.TEXT,
 			country: DataTypes.TEXT,
 			void: DataTypes.TEXT,
-			lastcheckoktime: DataTypes.TEXT,
-			void: DataTypes.TEXT
+			lastcheckoktime: DataTypes.TEXT
 		},
 		{
 			sequelize,

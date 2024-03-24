@@ -30,9 +30,6 @@ module.exports = {
 			lastcheckoktime: {
 				type: Sequelize.TEXT
 			},
-			void: {
-				type: Sequelize.TEXT
-			},
 			createdAt: {
 				allowNull: false,
 				type: Sequelize.DATE,

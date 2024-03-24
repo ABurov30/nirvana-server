@@ -15,8 +15,7 @@ module.exports = {
 					country: el.country,
 					favicon: (await checkImage(el.favicon)) ? el.favicon : '',
 					tags: el.tags,
-					lastcheckoktime: el.lastcheckoktime,
-					void: el.void
+					lastcheckoktime: el.lastcheckoktime
 				}
 			})
 		)
