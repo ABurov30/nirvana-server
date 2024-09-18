@@ -122,4 +122,26 @@ authController.post('/newPassword', async (req, res, next) => {
 	}
 })
 
+authController.findUsers = async (request, response) => {
+	let result = {
+		success: false,
+		contacts: null,
+		errors: null
+	}
+	try {
+		const { input } = request?.body
+		const users = await authService.findUsers(input)
+
+		result.success = true
+		result.users = users
+	} catch (error) {
+		result.success = true
+		result.errors = {
+			code: '500',
+			message: error.message
+		}
+	}
+	return result
+}
+
 module.exports = authController

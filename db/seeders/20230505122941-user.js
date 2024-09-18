@@ -17,6 +17,28 @@ module.exports = {
 					)}`,
 					confirmed: true,
 					isAdmin: true
+				},
+				{
+					id: '110517773571340756458',
+					email: 'iamandreyburov@mail.ru',
+					nickname: 'Andrey',
+					hashpass: `${await bcrypt.hash(
+						process.env.ADMIN_PASSWORD,
+						10
+					)}`,
+					confirmed: true,
+					isAdmin: true
+				},
+				{
+					id: '103409448222936552320',
+					email: 'samantaharis6@gmail.com',
+					nickname: 'Samanta',
+					hashpass: `${await bcrypt.hash(
+						process.env.ADMIN_PASSWORD,
+						10
+					)}`,
+					confirmed: true,
+					isAdmin: true
 				}
 			],
 			{}

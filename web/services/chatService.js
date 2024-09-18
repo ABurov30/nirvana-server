@@ -1,30 +1,68 @@
-const { where } = require('sequelize')
-const { Chat, Message } = require('../../db/models')
-const chat = require('../../db/models/chat')
+const {
+	Chat,
+	Message,
+	ChatPerUser,
+	User,
+	Sequelize
+} = require('../../db/models')
+const { Op } = Sequelize
 
-async function getChats() {
+async function getChatsByUser(userId) {
 	try {
-		let chats = await Chat.findAll()
-		chats = chats.map(({ dataValues }) => dataValues)
-		let messages = await Message.findAll()
-		messages = messages.map(({ dataValues }) => dataValues)
-		messagesDictionary = {}
-		for (let i = 0; i < messages.length; i++) {
-			if (messagesDictionary[messages[i].chatId]) {
-				messagesDictionary[messages[i].chatId].push(messages[i])
-			} else {
-				messagesDictionary[messages[i].chatId] = [messages[i]]
-			}
-		}
-
-		chats = chats.map(chat => {
-			if (messagesDictionary[chat?.id]) {
-				chat.messages = messagesDictionary[chat?.id]
-			} else {
-				chat.messages = []
-			}
-			return chat
+		let chatsId = await ChatPerUser.findAll({
+			where: { userId },
+			attributes: ['chatId']
 		})
+		chatsId = chatsId.map(({ dataValues }) => dataValues?.chatId)
+		const chatsIdDictionary = new Set(chatsId)
+
+		let chats = await Chat.findAll({
+			include: [
+				{
+					model: Message,
+					as: 'messages',
+					include: [
+						{
+							model: User,
+							as: 'user',
+							attributes: ['nickname', 'id', 'email']
+						}
+					],
+					attributes: [
+						'userId',
+						'id',
+						'message',
+						'chatId',
+						'createdAt'
+					]
+				}
+			],
+			attributes: ['name', 'lastMessage', 'isNewMessage', 'id'],
+			order: [[Sequelize.col('messages.createdAt'), 'ASC']]
+		})
+
+		chats = chats
+			.map(chat => chat.get({ plain: true }))
+			.filter(chat => {
+				if (chatsIdDictionary.has(chat?.id)) return chat
+			})
+		chats = await Promise.all(
+			chats.map(async chat => {
+				const { id } = chat
+
+				let users = await ChatPerUser.findAll({
+					where: { chatId: chat.id },
+					include: [
+						{ model: User, attributes: ['nickname', 'id', 'email'] }
+					]
+				})
+				users = users.map(user => {
+					const { User } = user.get({ plain: true })
+					return User
+				})
+				return { ...chat, members: users }
+			})
+		)
 
 		return chats
 	} catch (e) {
@@ -33,6 +71,44 @@ async function getChats() {
 	}
 }
 
+async function findChatsByName(name) {
+	try {
+		let chats = await Chat.findAll({
+			where: {
+				name: Sequelize.where(
+					Sequelize.fn('LOWER', Sequelize.col('name')),
+					{
+						[Op.iLike]: `%${name.trim().toLowerCase()}%`
+					}
+				)
+			}
+		})
+		chats = chats.map(chat => chat.get({ plain: true }))
+
+		return chats
+	} catch (e) {
+		console.error(e)
+		throw e
+	}
+}
+
+async function editChat(chat, userId) {
+	try {
+		const res = await Chat.update(chat, {
+			where: {
+				id: chat.id
+			}
+		})
+
+		return res[0] > 0
+	} catch (e) {
+		console.error(e)
+		throw e
+	}
+}
+
 module.exports = {
-	getChats
+	getChatsByUser,
+	findChatsByName,
+	editChat
 }

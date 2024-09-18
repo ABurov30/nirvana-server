@@ -1,11 +1,12 @@
 const bcrypt = require('bcrypt')
-const { User } = require('../../db/models')
+const { User, Sequelize } = require('../../db/models')
 const crypto = require('crypto')
 require('dotenv').config()
 const changePassword = require('../mails/changePassword')
 const mailerService = require('../services/mailerService')
 const confirmEmail = require('../mails/confirmEmail')
 const { v4: uuidv4 } = require('uuid')
+const { Op } = Sequelize
 
 async function signup(nickname, email, password) {
 	try {
@@ -172,6 +173,27 @@ async function newPassword(password, userId) {
 	}
 }
 
+async function findUsers(nickname) {
+	try {
+		let users = await User.findAll({
+			where: {
+				name: Sequelize.where(
+					Sequelize.fn('LOWER', Sequelize.col('nickname')),
+					{
+						[Op.iLike]: `%${nickname.trim().toLowerCase()}%`
+					}
+				)
+			}
+		})
+		users = users.map(user => user.get({ plain: true }))
+
+		return users
+	} catch (e) {
+		console.error(e)
+		throw e
+	}
+}
+
 module.exports = {
 	signup,
 	login,
@@ -180,5 +202,6 @@ module.exports = {
 	reset,
 	newPassword,
 	deleteUser,
-	editUserInfo
+	editUserInfo,
+	findUsers
 }

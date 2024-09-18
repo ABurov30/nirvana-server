@@ -28,7 +28,7 @@ module.exports = {
 				unique: 'compositeKeyRadioUserId'
 			},
 			userId: {
-				type: Sequelize.UUID,
+				type: Sequelize.STRING,
 				references: {
 					model: 'Users',
 					key: 'id'

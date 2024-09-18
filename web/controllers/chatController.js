@@ -1,13 +1,15 @@
 const chatService = require('../services/chatService')
 
-async function getChats(request, response) {
+async function getChatsByUser(request, response) {
 	let result = {
 		success: false,
 		chats: null,
 		errors: null
 	}
 	try {
-		let chats = chatService.getChats()
+		const { id } = request?.body
+		let chats = await chatService.getChatsByUser(id)
+		console.log('🚀 ~ getChatsByUser ~ chats:', chats)
 		if (chats == null) {
 			result.errors = {
 				code: '200',
@@ -28,6 +30,62 @@ async function getChats(request, response) {
 	return result
 }
 
+async function findChats(request, response) {
+	let result = {
+		success: false,
+		chats: null,
+		errors: null
+	}
+	try {
+		const { input } = request?.body
+		const chats = await chatService.findChatsByName(input)
+
+		result.success = true
+		result.chats = chats
+	} catch (error) {
+		result.success = true
+		result.errors = {
+			code: '500',
+			message: error.message
+		}
+	}
+	return result
+}
+
+async function editChat(request, response) {
+	let result = {
+		success: false,
+		chat: null,
+		errors: null
+	}
+	try {
+		const { chat, userId } = request?.body
+		let isEdited = await chatService.editChat(chat, userId)
+		if (isEdited) {
+			result.errors = {
+				code: '200',
+				message: 'Updated'
+			}
+			result.success = true
+		} else {
+			result.errors = {
+				code: '200',
+				message: 'Nothing to update'
+			}
+			result.success = true
+		}
+	} catch (error) {
+		result.success = true
+		result.errors = {
+			code: '500',
+			message: error.message
+		}
+	}
+	return result
+}
+
 module.exports = {
-	getChats
+	getChatsByUser,
+	findChats,
+	editChat
 }

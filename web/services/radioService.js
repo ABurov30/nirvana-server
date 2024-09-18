@@ -289,6 +289,7 @@ async function topRadios(offset, userId) {
 			limit: 5,
 			offset: offset
 		})
+		console.log(radios, '-------')
 		const results = radios.map(result => result.dataValues)
 		const response = await trackMapper.toClient(results, 'radio', userId)
 		return response

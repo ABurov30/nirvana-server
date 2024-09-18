@@ -37,19 +37,19 @@ module.exports = {
 					isNewMessage: false
 				},
 				{
-					id: uuidv4(),
+					id: '8a2e3601-291f-4205-9a73-209bf593b8d6',
 					name: 'andrey burov 6',
 					lastMessage: 'privet6',
 					isNewMessage: false
 				},
 				{
-					id: uuidv4(),
+					id: '31470e3d-0bcd-49d6-afe0-92686ac5e3a2',
 					name: 'andrey burov 7',
 					lastMessage: 'privet7',
 					isNewMessage: false
 				},
 				{
-					id: uuidv4(),
+					id: 'b86976b6-f664-444a-913a-bd8881252508',
 					name: 'andrey burov 8',
 					lastMessage: 'privet8',
 					isNewMessage: true

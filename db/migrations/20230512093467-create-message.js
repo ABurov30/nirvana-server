@@ -10,7 +10,7 @@ module.exports = {
 				isUUID: 4
 			},
 			userId: {
-				type: Sequelize.UUID,
+				type: Sequelize.STRING,
 				references: {
 					model: 'Users',
 					key: 'id'
@@ -21,7 +21,7 @@ module.exports = {
 				type: Sequelize.TEXT
 			},
 			chatId: {
-				type: Sequelize.UUID,
+				type: Sequelize.STRING,
 				references: {
 					model: 'Chats',
 					key: 'id'

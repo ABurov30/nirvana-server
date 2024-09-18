@@ -1,11 +1,18 @@
 const typeDefs = `
 
-type ChatResponse {
+type Chat {
   id: String
   name: String
   lastMessage: String
   isNewMessage: Boolean
   messages: [Message]
+  members: [User]
+}
+
+type User {
+  id: String
+  email: String
+  nickname: String
 }
 
 type Message {
@@ -13,12 +20,59 @@ type Message {
   message: String
   userId: String
   chatId: String
+  user: User
 }
 
-type QueryChatsResponse{
+type Contact {
+id: String
+name: String
+user: User
+}
+
+
+type GetChatsByUserResponse{
   success: Boolean
   errors: ErrorInfo
-  chats: [ChatResponse]
+  chats: [Chat]
+}
+
+type GetContactsByUserResponse{
+  success: Boolean
+  errors: ErrorInfo
+  contacts: [Contact]
+}
+
+input EditContactInput {
+  id: String
+  name: String
+  contactOwnerId: String
+}
+
+
+input UserInput {
+  id: String
+  email: String
+  nickname: String
+}
+
+type ContactResponse {
+  success: Boolean
+  errors: ErrorInfo
+  contact: Contact  
+}
+
+
+type DeleteContactResponse {
+  success: Boolean
+  errors: ErrorInfo
+}
+
+type GetSearchEntitiesResponse {
+  success: Boolean
+  errors: ErrorInfo
+  chats: [Chat]
+  users: [User]
+  messages: [Message]
 }
 
 type ErrorInfo{
@@ -27,9 +81,16 @@ type ErrorInfo{
 }
 
 type Query {
-  queryChats: QueryChatsResponse
+    getChatsByUser(id: String!): GetChatsByUserResponse  
+    getContactsByUser(id: String!):GetContactsByUserResponse
+    getSearchEntities(input: String!): GetSearchEntitiesResponse
 }
 
+type Mutation {
+    editContact(contact: EditContactInput!): ContactResponse
+    deleteContact(contactId: String!): DeleteContactResponse
+    addContact(contact: UserInput, user: UserInput): ContactResponse
+}
 `
 
 module.exports = {

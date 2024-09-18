@@ -4,7 +4,7 @@ const checkImage = require('../../web/utils/checkImage')
 
 module.exports = {
 	async up(queryInterface, Sequelize) {
-		const radios = await RadioBrowser.getStations({ limit: 10 })
+		const radios = await RadioBrowser.getStations({ limit: 100 })
 		const radiosWithUsefullFields = await Promise.all(
 			radios.map(async el => {
 				return {

@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
 			favicon: DataTypes.TEXT,
 			tags: DataTypes.TEXT,
 			country: DataTypes.TEXT,
-			void: DataTypes.TEXT,
+			votes: DataTypes.INTEGER,
 			lastcheckoktime: DataTypes.TEXT
 		},
 		{

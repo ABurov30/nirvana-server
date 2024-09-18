@@ -23,7 +23,10 @@ const helmet = require('helmet')
 const { errorHandler } = require('./web/middleware/errorHandler')
 require('dotenv').config()
 const { config } = require('dotenv')
-const { onConnection } = require('./web/controllers/messageController')
+const {
+	onConnection,
+	socketController
+} = require('./web/controllers/socketController')
 const { resolvers } = require('./web/utils/resolver')
 const { typeDefs } = require('./web/schema/typeDefs')
 
@@ -70,7 +73,7 @@ async function startServer() {
 	await server.start()
 
 	io.on('connection', socket => {
-		onConnection(socket)
+		socketController(socket)
 	})
 
 	app.use('/api/checkHealth', checkHealthController)
