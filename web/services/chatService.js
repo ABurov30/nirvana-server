@@ -200,9 +200,65 @@ async function addMembers(usersToAdd, chatId) {
 	}
 }
 
+async function deleteMember(memberId, chatId) {
+	try {
+		await ChatPerUser.destroy({
+			where: {
+				userId: memberId,
+				chatId
+			}
+		})
+
+		const updatedChat = (
+			await Chat.findOne({
+				include: [
+					{
+						model: Message,
+						as: 'messages',
+						include: [
+							{
+								model: User,
+								as: 'user',
+								attributes: ['nickname', 'id', 'email']
+							}
+						],
+						attributes: [
+							'userId',
+							'id',
+							'message',
+							'chatId',
+							'createdAt'
+						]
+					}
+				],
+				where: { id: chatId },
+				attributes: ['name', 'lastMessage', 'isNewMessage', 'id']
+			})
+		).get({ plain: true })
+
+		let members = await ChatPerUser.findAll({
+			where: { chatId },
+			include: [{ model: User, attributes: ['nickname', 'id', 'email'] }]
+		})
+
+		members = members.map(member => {
+			const { User } = member.get({ plain: true })
+			return User
+		})
+
+		updatedChat.members = members
+
+		return { success: true, res: { updatedChat, memberId } }
+	} catch (e) {
+		console.error(e)
+		throw e
+	}
+}
+
 module.exports = {
 	getChatsByUser,
 	findChatsByName,
 	updateChat,
-	addMembers
+	addMembers,
+	deleteMember
 }

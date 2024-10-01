@@ -31,6 +31,15 @@ function socketController(socket) {
 
 		if (success) socket.broadcast.emit('added members', res)
 	})
+
+	socket.on('delete member', async data => {
+		const { success, res } = await chatService.deleteMember(
+			data.memberId,
+			data.chatId
+		)
+
+		if (success) socket.broadcast.emit('deleted member', res)
+	})
 }
 
 module.exports = {
