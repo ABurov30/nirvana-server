@@ -15,6 +15,12 @@ async function getContactsByUser(obj, args, context) {
 	return await contactController.getContactsByUser(request, response)
 }
 
+async function getContactsToAddInChat(obj, args, context) {
+	const { request, response } = context
+	request.body = args
+	return await contactController.getContactsToAddInChat(request, response)
+}
+
 async function editContact(obj, args, context) {
 	const { request, response } = context
 	request.body = args
@@ -25,7 +31,7 @@ async function editContact(obj, args, context) {
 async function addContact(obj, args, context) {
 	const { request, response } = context
 	request.body = args
-	console.log(args, 'arg')
+
 	return await contactController.addContact(request, response)
 }
 
@@ -50,6 +56,7 @@ const resolvers = {
 	Query: {
 		getChatsByUser: getChatsByUser,
 		getContactsByUser: getContactsByUser,
+		getContactsToAddInChat: getContactsToAddInChat,
 		getSearchEntities: getSearchEntities
 	},
 	Mutation: {

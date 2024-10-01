@@ -129,8 +129,8 @@ authController.findUsers = async (request, response) => {
 		errors: null
 	}
 	try {
-		const { input } = request?.body
-		const users = await authService.findUsers(input)
+		const { input, userId } = request?.body
+		const users = await authService.findUsers(input, userId)
 
 		result.success = true
 		result.users = users

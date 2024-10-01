@@ -1,8 +1,12 @@
-const { ContactPerUser, User, Contact } = require('../../db/models')
+const {
+	ContactPerUser,
+	User,
+	Contact,
+	ChatPerUser
+} = require('../../db/models')
 const { v4: uuidv4 } = require('uuid')
 
 async function getContactByUser(contactOwnerId) {
-	console.log('🚀 ~ getContactByUser ~ contactOwnerId:', contactOwnerId)
 	try {
 		let contacts = await ContactPerUser.findAll({
 			where: { contactOwnerId },
@@ -31,16 +35,71 @@ async function getContactByUser(contactOwnerId) {
 	}
 }
 
-async function editContact(contact) {
+async function getContactsToAddInChat(userId, chatId) {
 	try {
-		await Contact.update(contact, {
-			where: {
-				id: contact.id
+		let contacts = await ContactPerUser.findAll({
+			where: { contactOwnerId: userId },
+			include: [
+				{
+					model: Contact,
+					as: 'contact',
+					include: [
+						{
+							model: User,
+							as: 'user',
+							attributes: ['nickname', 'id', 'email']
+						}
+					]
+				}
+			]
+		})
+		contacts = contacts
+			.map(contact => contact.get({ plain: true }))
+			.map(({ contact }) => contact)
+
+		let members = await ChatPerUser.findAll({
+			where: { chatId },
+			include: [{ model: User, attributes: ['nickname', 'id', 'email'] }]
+		})
+		members = members.map(user => {
+			const { User } = user.get({ plain: true })
+			return User
+		})
+
+		const membersDictionary = new Map()
+
+		members.forEach(member => {
+			membersDictionary.set(member.id, member)
+		})
+
+		contacts = contacts.filter(contact => {
+			if (!membersDictionary.has(contact.user.id)) {
+				return contact
 			}
 		})
+
+		return contacts
+	} catch (e) {
+		console.error(e)
+		throw e
+	}
+}
+
+async function editContact(contact) {
+	try {
+		const updatedData = await Contact.update(contact, {
+			where: {
+				id: contact.id
+			},
+			returning: true
+		})
+
 		const { contact: editedContact } = (
 			await ContactPerUser.findOne({
-				where: { contactOwnerId: contact.contactOwnerId },
+				where: {
+					contactOwnerId: contact.contactOwnerId,
+					contactId: contact.id
+				},
 				include: [
 					{
 						model: Contact,
@@ -55,7 +114,7 @@ async function editContact(contact) {
 					}
 				]
 			})
-		).get({ plain: true })
+		)?.get({ plain: true })
 
 		return editedContact
 	} catch (e) {
@@ -66,17 +125,18 @@ async function editContact(contact) {
 
 async function addContact(contact, user) {
 	try {
-		const res = await Contact.create({
-			id: uuidv4(),
+		const contactId = uuidv4()
+		await Contact.create({
+			id: contactId,
 			name: contact.nickname,
 			userId: contact.id
 		})
-		console.log(res, 'res -=--------')
+
 		const uuid = uuidv4()
 		await ContactPerUser.create({
 			id: uuid,
 			contactOwnerId: user.id,
-			contactId: res.dataValues.id
+			contactId: contactId
 		})
 		const { contact: addedContact } = (
 			await ContactPerUser.findOne({
@@ -126,5 +186,6 @@ module.exports = {
 	getContactByUser,
 	editContact,
 	deleteContact,
+	getContactsToAddInChat,
 	addContact
 }

@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require('uuid')
 const {
 	Chat,
 	Message,
@@ -5,6 +6,7 @@ const {
 	User,
 	Sequelize
 } = require('../../db/models')
+const { where } = require('sequelize')
 const { Op } = Sequelize
 
 async function getChatsByUser(userId) {
@@ -46,10 +48,9 @@ async function getChatsByUser(userId) {
 			.filter(chat => {
 				if (chatsIdDictionary.has(chat?.id)) return chat
 			})
+
 		chats = await Promise.all(
 			chats.map(async chat => {
-				const { id } = chat
-
 				let users = await ChatPerUser.findAll({
 					where: { chatId: chat.id },
 					include: [
@@ -92,15 +93,107 @@ async function findChatsByName(name) {
 	}
 }
 
-async function editChat(chat, userId) {
+async function updateChat(chat) {
 	try {
 		const res = await Chat.update(chat, {
 			where: {
 				id: chat.id
-			}
+			},
+			returning: true
 		})
 
-		return res[0] > 0
+		const editedChat = (
+			await Chat.findOne({
+				where: {
+					id: chat.id
+				},
+				include: [
+					{
+						model: Message,
+						as: 'messages',
+						include: [
+							{
+								model: User,
+								as: 'user',
+								attributes: ['nickname', 'id', 'email']
+							}
+						],
+						attributes: [
+							'userId',
+							'id',
+							'message',
+							'chatId',
+							'createdAt'
+						]
+					}
+				]
+			})
+		).get({ plain: true })
+
+		let users = await ChatPerUser.findAll({
+			where: { chatId: chat.id },
+			include: [{ model: User, attributes: ['nickname', 'id', 'email'] }]
+		})
+		users = users.map(user => {
+			const { User } = user.get({ plain: true })
+			return User
+		})
+
+		editedChat.members = users
+
+		return { success: res[0] > 0, res: editedChat }
+	} catch (e) {
+		console.error(e)
+		throw e
+	}
+}
+
+async function addMembers(usersToAdd, chatId) {
+	try {
+		await usersToAdd.forEach(async user => {
+			await ChatPerUser.create({ chatId, userId: user.id, id: uuidv4() })
+		})
+
+		const updatedChat = (
+			await Chat.findOne({
+				include: [
+					{
+						model: Message,
+						as: 'messages',
+						include: [
+							{
+								model: User,
+								as: 'user',
+								attributes: ['nickname', 'id', 'email']
+							}
+						],
+						attributes: [
+							'userId',
+							'id',
+							'message',
+							'chatId',
+							'createdAt'
+						]
+					}
+				],
+				where: { id: chatId },
+				attributes: ['name', 'lastMessage', 'isNewMessage', 'id']
+			})
+		).get({ plain: true })
+
+		let members = await ChatPerUser.findAll({
+			where: { chatId },
+			include: [{ model: User, attributes: ['nickname', 'id', 'email'] }]
+		})
+
+		members = members.map(member => {
+			const { User } = member.get({ plain: true })
+			return User
+		})
+
+		updatedChat.members = members
+
+		return { success: true, res: updatedChat }
 	} catch (e) {
 		console.error(e)
 		throw e
@@ -110,5 +203,6 @@ async function editChat(chat, userId) {
 module.exports = {
 	getChatsByUser,
 	findChatsByName,
-	editChat
+	updateChat,
+	addMembers
 }

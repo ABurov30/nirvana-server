@@ -9,7 +9,7 @@ async function getChatsByUser(request, response) {
 	try {
 		const { id } = request?.body
 		let chats = await chatService.getChatsByUser(id)
-		console.log('🚀 ~ getChatsByUser ~ chats:', chats)
+
 		if (chats == null) {
 			result.errors = {
 				code: '200',

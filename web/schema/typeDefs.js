@@ -83,7 +83,8 @@ type ErrorInfo{
 type Query {
     getChatsByUser(id: String!): GetChatsByUserResponse  
     getContactsByUser(id: String!):GetContactsByUserResponse
-    getSearchEntities(input: String!): GetSearchEntitiesResponse
+    getContactsToAddInChat(userId: String!, chatId: String!): GetContactsByUserResponse
+    getSearchEntities(input: String!, userId: String!): GetSearchEntitiesResponse
 }
 
 type Mutation {

@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt')
-const { User, Sequelize } = require('../../db/models')
+const { User, Sequelize, ContactPerUser, Contact } = require('../../db/models')
 const crypto = require('crypto')
 require('dotenv').config()
 const changePassword = require('../mails/changePassword')
@@ -173,7 +173,7 @@ async function newPassword(password, userId) {
 	}
 }
 
-async function findUsers(nickname) {
+async function findUsers(nickname, userId) {
 	try {
 		let users = await User.findAll({
 			where: {
@@ -186,6 +186,38 @@ async function findUsers(nickname) {
 			}
 		})
 		users = users.map(user => user.get({ plain: true }))
+
+		let contacts = await ContactPerUser.findAll({
+			where: { contactOwnerId: userId },
+			include: [
+				{
+					model: Contact,
+					as: 'contact',
+					include: [
+						{
+							model: User,
+							as: 'user',
+							attributes: ['nickname', 'id', 'email']
+						}
+					]
+				}
+			]
+		})
+		contacts = contacts
+			.map(contact => contact.get({ plain: true }))
+			.map(({ contact }) => contact)
+
+		const contactsDictionary = new Map()
+
+		contacts.forEach(contact => {
+			contactsDictionary.set(contact.user.id, contact)
+		})
+
+		users = users.filter(user => {
+			if (!contactsDictionary.has(user.id)) {
+				return user
+			}
+		})
 
 		return users
 	} catch (e) {

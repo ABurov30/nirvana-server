@@ -10,7 +10,40 @@ async function getContactsByUser(request, response) {
 	try {
 		const { id } = request?.body
 		let contacts = await contactService.getContactByUser(id)
-		console.log('🚀 ~ getContactsByUser ~ contacts:', contacts)
+
+		if (contacts == null) {
+			result.errors = {
+				code: '200',
+				message: 'No result'
+			}
+			result.success = true
+		} else {
+			result.contacts = contacts
+			result.success = true
+		}
+	} catch (error) {
+		result.success = true
+		result.errors = {
+			code: '500',
+			message: error.message
+		}
+	}
+	return result
+}
+
+async function getContactsToAddInChat(request, response) {
+	let result = {
+		success: false,
+		contacts: null,
+		errors: null
+	}
+	try {
+		const { userId, chatId } = request?.body
+		let contacts = await contactService.getContactsToAddInChat(
+			userId,
+			chatId
+		)
+
 		if (contacts == null) {
 			result.errors = {
 				code: '200',
@@ -39,6 +72,7 @@ async function editContact(request, response) {
 	}
 	try {
 		const { contact } = request?.body
+
 		let editedContact = await contactService.editContact(contact)
 		if (editedContact == null) {
 			result.errors = {
@@ -116,6 +150,7 @@ async function addContact(request, response) {
 
 module.exports = {
 	getContactsByUser,
+	getContactsToAddInChat,
 	editContact,
 	deleteContact,
 	addContact
