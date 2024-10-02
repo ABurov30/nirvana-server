@@ -3,7 +3,6 @@ const typeDefs = `
 type Chat {
   id: String
   name: String
-  lastMessage: String
   isNewMessage: Boolean
   messages: [Message]
   members: [User]
@@ -61,6 +60,11 @@ type ContactResponse {
   contact: Contact  
 }
 
+type ChatResponse {
+  success: Boolean
+  errors: ErrorInfo
+  chat: Chat  
+}
 
 type DeleteContactResponse {
   success: Boolean
@@ -91,6 +95,7 @@ type Mutation {
     editContact(contact: EditContactInput!): ContactResponse
     deleteContact(contactId: String!): DeleteContactResponse
     addContact(contact: UserInput, user: UserInput): ContactResponse
+    addChat(userId: String!): ChatResponse
 }
 `
 

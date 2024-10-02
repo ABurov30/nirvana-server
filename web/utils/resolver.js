@@ -52,6 +52,13 @@ async function getSearchEntities(obj, args, context) {
 	return { ...chats, ...messages, ...users }
 }
 
+async function addChat(obj, args, context) {
+	const { request, response } = context
+	request.body = args
+
+	return await chatController.addChat(request, response)
+}
+
 const resolvers = {
 	Query: {
 		getChatsByUser: getChatsByUser,
@@ -62,7 +69,8 @@ const resolvers = {
 	Mutation: {
 		editContact: editContact,
 		deleteContact: deleteContact,
-		addContact: addContact
+		addContact: addContact,
+		addChat: addChat
 	}
 }
 

@@ -1,5 +1,6 @@
 const messageService = require('../services/messageService')
 const chatService = require('../services/chatService')
+const { sequelize } = require('../../db/models')
 
 function socketController(socket) {
 	socket.on('send message', async data => {
@@ -24,21 +25,49 @@ function socketController(socket) {
 	})
 
 	socket.on('add members', async data => {
-		const { success, res } = await chatService.addMembers(
-			data.usersToAdd,
-			data.chatId
-		)
+		const t = await sequelize.transaction()
+		try {
+			const { success, res } = await chatService.addMembers(
+				data.usersToAdd,
+				data.chatId
+			)
 
-		if (success) socket.broadcast.emit('added members', res)
+			if (success) socket.broadcast.emit('added members', res)
+			await t.commit()
+		} catch (e) {
+			console.error(e)
+			await t.rollback()
+		}
 	})
 
 	socket.on('delete member', async data => {
-		const { success, res } = await chatService.deleteMember(
-			data.memberId,
-			data.chatId
-		)
+		const t = await sequelize.transaction()
+		try {
+			const { success, res } = await chatService.deleteMember(
+				data.memberId,
+				data.chatId
+			)
 
-		if (success) socket.broadcast.emit('deleted member', res)
+			if (success) socket.broadcast.emit('deleted member', res)
+			await t.commit()
+		} catch (e) {
+			console.error
+			await t.rollback()
+		}
+	})
+
+	socket.on('delete chat', async data => {
+		const t = await sequelize.transaction()
+		try {
+			const { success } = await chatService.deleteChat(data.chatId)
+
+			if (success)
+				socket.broadcast.emit('deleted chat', { chatId: data.chatId })
+			await t.commit()
+		} catch (e) {
+			console.error
+			await t.rollback()
+		}
 	})
 }
 

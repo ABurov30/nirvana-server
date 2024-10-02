@@ -18,10 +18,6 @@ module.exports = (sequelize, DataTypes) => {
 				type: DataTypes.TEXT,
 				allowNull: false
 			},
-			lastMessage: {
-				type: DataTypes.TEXT,
-				allowNull: true
-			},
 			isNewMessage: {
 				type: DataTypes.BOOLEAN,
 				defaultValue: false

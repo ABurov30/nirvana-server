@@ -39,7 +39,7 @@ async function getChatsByUser(userId) {
 					]
 				}
 			],
-			attributes: ['name', 'lastMessage', 'isNewMessage', 'id'],
+			attributes: ['name', 'isNewMessage', 'id'],
 			order: [[Sequelize.col('messages.createdAt'), 'ASC']]
 		})
 
@@ -94,6 +94,7 @@ async function findChatsByName(name) {
 }
 
 async function updateChat(chat) {
+	console.log('🚀 ~ updateChat ~ chat:', chat)
 	try {
 		const res = await Chat.update(chat, {
 			where: {
@@ -177,7 +178,7 @@ async function addMembers(usersToAdd, chatId) {
 					}
 				],
 				where: { id: chatId },
-				attributes: ['name', 'lastMessage', 'isNewMessage', 'id']
+				attributes: ['name', 'isNewMessage', 'id']
 			})
 		).get({ plain: true })
 
@@ -232,7 +233,7 @@ async function deleteMember(memberId, chatId) {
 					}
 				],
 				where: { id: chatId },
-				attributes: ['name', 'lastMessage', 'isNewMessage', 'id']
+				attributes: ['name', 'isNewMessage', 'id']
 			})
 		).get({ plain: true })
 
@@ -248,7 +249,96 @@ async function deleteMember(memberId, chatId) {
 
 		updatedChat.members = members
 
+		if (!updateChat?.members?.length) {
+			await Chat.destroy({ where: { id: updateChat?.id } })
+		}
+
 		return { success: true, res: { updatedChat, memberId } }
+	} catch (e) {
+		console.error(e)
+		throw e
+	}
+}
+
+async function addChat(userId) {
+	try {
+		const newChat = (
+			await Chat.create({
+				id: uuidv4(),
+				name: 'New chat',
+				isNewMessage: false
+			})
+		).get({ plain: true })
+
+		await ChatPerUser.create({
+			id: uuidv4(),
+			userId,
+			chatId: newChat.id
+		})
+
+		const addedChat = (
+			await Chat.findOne({
+				where: {
+					id: newChat.id
+				},
+				include: [
+					{
+						model: Message,
+						as: 'messages',
+						include: [
+							{
+								model: User,
+								as: 'user',
+								attributes: ['nickname', 'id', 'email']
+							}
+						],
+						attributes: [
+							'userId',
+							'id',
+							'message',
+							'chatId',
+							'createdAt'
+						]
+					}
+				]
+			})
+		).get({ plain: true })
+
+		let members = await ChatPerUser.findAll({
+			where: { chatId: newChat.id },
+			include: [{ model: User, attributes: ['nickname', 'id', 'email'] }]
+		})
+
+		members = members.map(member => {
+			const { User } = member.get({ plain: true })
+			return User
+		})
+
+		addedChat.members = members
+
+		return addedChat
+	} catch (e) {
+		console.error(e)
+		throw e
+	}
+}
+
+async function deleteChat(chatId) {
+	console.log('🚀 ~ deleteChat ~ chatId:', chatId)
+	try {
+		await ChatPerUser.destroy({
+			where: {
+				chatId: chatId
+			}
+		})
+		await Message.destroy({
+			where: {
+				chatId: chatId
+			}
+		})
+
+		await Chat.destroy({ where: { id: chatId } })
+		return { success: true }
 	} catch (e) {
 		console.error(e)
 		throw e
@@ -260,5 +350,7 @@ module.exports = {
 	findChatsByName,
 	updateChat,
 	addMembers,
-	deleteMember
+	deleteMember,
+	addChat,
+	deleteChat
 }

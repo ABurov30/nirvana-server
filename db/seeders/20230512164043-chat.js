@@ -9,49 +9,41 @@ module.exports = {
 				{
 					id: uuidv4(),
 					name: 'andrey burov 1',
-					lastMessage: 'privet',
 					isNewMessage: true
 				},
 				{
 					id: uuidv4(),
 					name: 'andrey burov 2',
-					lastMessage: 'privet2',
 					isNewMessage: true
 				},
 				{
 					id: uuidv4(),
 					name: 'andrey burov 3',
-					lastMessage: 'privet3',
 					isNewMessage: false
 				},
 				{
 					id: uuidv4(),
 					name: 'andrey burov 4',
-					lastMessage: 'privet4',
 					isNewMessage: false
 				},
 				{
 					id: uuidv4(),
 					name: 'andrey burov 5',
-					lastMessage: 'privet5',
 					isNewMessage: false
 				},
 				{
 					id: '8a2e3601-291f-4205-9a73-209bf593b8d6',
 					name: 'andrey burov 6',
-					lastMessage: 'privet6',
 					isNewMessage: false
 				},
 				{
 					id: '31470e3d-0bcd-49d6-afe0-92686ac5e3a2',
 					name: 'andrey burov 7',
-					lastMessage: 'privet7',
 					isNewMessage: false
 				},
 				{
 					id: 'b86976b6-f664-444a-913a-bd8881252508',
 					name: 'andrey burov 8',
-					lastMessage: 'privet8',
 					isNewMessage: true
 				}
 			],

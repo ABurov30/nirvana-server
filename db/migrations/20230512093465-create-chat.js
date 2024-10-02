@@ -12,9 +12,6 @@ module.exports = {
 			name: {
 				type: Sequelize.TEXT
 			},
-			lastMessage: {
-				type: Sequelize.TEXT
-			},
 			isNewMessage: {
 				type: Sequelize.BOOLEAN,
 				defaultValue: false

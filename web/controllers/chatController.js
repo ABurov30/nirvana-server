@@ -1,4 +1,5 @@
 const chatService = require('../services/chatService')
+const { sequelize } = require('../../db/models')
 
 async function getChatsByUser(request, response) {
 	let result = {
@@ -60,7 +61,7 @@ async function editChat(request, response) {
 	}
 	try {
 		const { chat, userId } = request?.body
-		let isEdited = await chatService.editChat(chat, userId)
+		let isEdited = await chatService.updateChat(chat, userId)
 		if (isEdited) {
 			result.errors = {
 				code: '200',
@@ -84,8 +85,46 @@ async function editChat(request, response) {
 	return result
 }
 
+async function addChat(request, response) {
+	let result = {
+		success: false,
+		chat: null,
+		errors: null
+	}
+	const t = await sequelize.transaction()
+	try {
+		const { userId } = request?.body
+		let newChat = await chatService.addChat(userId)
+
+		if (newChat) {
+			result.errors = {
+				code: '200',
+				message: 'Created'
+			}
+			result.success = true
+			result.chat = newChat
+		} else {
+			result.errors = {
+				code: '200',
+				message: 'Nothing created'
+			}
+			result.success = true
+		}
+	} catch (error) {
+		result.success = true
+		result.errors = {
+			code: '500',
+			message: error.message
+		}
+		await t.rollback()
+	}
+	await t.commit()
+	return result
+}
+
 module.exports = {
 	getChatsByUser,
 	findChats,
-	editChat
+	editChat,
+	addChat
 }
