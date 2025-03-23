@@ -1,0 +1,27 @@
+services:
+  app:
+    image: node:22-alpine
+    volumes:
+      - .:/app/
+    working_dir: /app
+    command:
+      - npm
+      - run
+      - start
+    ports:
+      - 3001
+
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_DB: ${DB_DATABASE}
+
+  pgadmin:
+    image: dpage/pgadmin4:8.9
+    environment:
+      PGADMIN_DEFAULT_PASSWORD: ${DB_PASSWORD}
+      PGADMIN_DEFAULT_EMAIL: ${ADMIN_EMAIL}
+    ports:
+      - 80
